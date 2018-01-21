@@ -2,9 +2,9 @@
 
 .atom
 
-.aux
-.log
-.synctex.gz
+*.aux
+*.log
+*.synctex.gz
 
 .ipynb_checkpoints/
 
