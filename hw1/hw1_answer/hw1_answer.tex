@@ -154,6 +154,8 @@ The first $\geq$ in step (8) is proven in class, and the second $\geq$ is to plu
 
 \section{Programming Assignment}
 
+\textbf{For questions 1 and 2, if not stated otherwise, the epoch parameter is set to 100.}
+
 \begin{enumerate}
 \item 
 \begin{enumerate}
@@ -165,6 +167,12 @@ The first $\geq$ in step (8) is proven in class, and the second $\geq$ is to plu
 	As the epoch counter increases, the accuracy shows an increasing tendency.
 	
 	So if I increase the maximum number of epochs, the accuracy after the algorithm finishes will also increase. If I decrease the maximum number of epochs, the accuracy after the algorithm finishes will decrease.
+	
+	And based on my experiments, I found that the curve of accuracy vs epoch counter is convex. When $I$ gets larger, the accuracy won't increase as fast as when $I$ is small.
+	
+	The following is the same plot when $I = 1000$:
+	
+	\includegraphics[scale=0.5]{p2q1a2.png}
 	
 	\item 
 	The plot between epoch counter and the algorithm accuracy on both training and testing data:
@@ -192,7 +200,7 @@ The first $\geq$ in step (8) is proven in class, and the second $\geq$ is to plu
 	
 	\includegraphics[scale=0.5]{p2q1d.png}
 	
-	The ROC curve depicts the trade off relationship between FPR and TPR, i.e., for a given FPR, what's the value of TPR. For a given FPR, we would prefer a higher TPR. So based on the comparison of ROCs, the weight vector $w*$ stands for a better decision boundary than $w'$.
+	The ROC curve depicts the trade off relationship between FPR (cost of the algorithm) and TPR (benefit of the algorithm), i.e., for a given FPR, what's the value of TPR. For a given FPR, we would prefer a higher TPR. So based on the comparison of ROCs, the weight vector $w*$ stands for a better decision boundary than $w'$.
 	
 	\item
 	AUC for $w*$ is 0.9771385482873396.
@@ -226,11 +234,23 @@ The first $\geq$ in step (8) is proven in class, and the second $\geq$ is to plu
 	
 	\includegraphics[scale=0.5]{p2q2b1.png}
 	
-	After this, I try $\eta = [0.02, 0.04, 0.06, 0.08]$ to see if smaller values would lead to even better accuracy. From the following plot, I think the performances of $\eta = [0.02, 0.04, 0.06, 0.08, 0.1]$ are similar to each other.
+	This is also the case when I set $I = 500$:
+	
+	\includegraphics[scale=0.5]{p2q2b3.png}
+	
+	After this, I try $\eta = [0.02, 0.04, 0.06, 0.08]$ to see if smaller values would lead to even better accuracy. From the following plot where $I = 100$, I think the performances of $\eta = [0.02, 0.04, 0.06, 0.08, 0.1]$ are similar to each other.
 	
 	\includegraphics[scale=0.5]{p2q2b2.png}
 	
-	In general, to tune a parameter in an algorithm, I would try to use as many values of the parameter as possible, calculate certain reasonable measuring metrics of the algorithm under each parameter value, and see if some parameter values can lead to better performance of these measuring metrics.
+	But when I set $I = 500$, I find that smaller $\eta$ values still lead to better accuracy:
+	
+	\includegraphics[scale=0.5]{p2q2b4.png}
+	
+	So based on my experiments, when $I = 100$, $\eta = [0.02, 0.04, 0.06, 0.08, 0.1]$ work better than larger values in terms of accuracy, and when $I = 500$, $\eta = 0.02$ works better than others.
+	
+	In general, to tune a parameter in an algorithm, I would try to use as many values of the parameter as possible, calculate certain reasonable measuring metrics of the algorithm under each parameter value, and see if some parameter values can lead to better performance of these measuring metrics. 
+	
+	And also I would consider the joint effect of the target parameter and other parameters. It's likely that when other parameters take different values, the optimized target parameter is also different.
 \end{enumerate}
 \end{enumerate}
 
