@@ -1,0 +1,11 @@
+.DS_Store
+
+.atom
+
+*.aux
+*.log
+*.synctex.gz
+
+.ipynb_checkpoints/
+
+MNIST_data/
