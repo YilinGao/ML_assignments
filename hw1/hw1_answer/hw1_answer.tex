@@ -132,24 +132,21 @@ Step (5) is proven in class. Step (6) is because for the misclassified point $i$
 
 Third,
 \begin{equation}
-1 \geq \frac{\vec{w}^{sep} \cdot \vec{w}^T}{\Vert \vec{w}^{sep} \Vert \Vert \vec{w}^{T} \Vert} \geq \frac{T + \vec{w}^{sep} \cdot \vec{w}^{0}}{\Vert \vec{w}^{sep} \Vert  \sqrt{\Vert \vec{w}^{0} \Vert^2 + T}}
+\Vert \vec{w}^{T} - \vec{w}^{sep} \Vert^2 = \Vert \vec{w}^{sep} \Vert^2 + \Vert \vec{w}^{T} \Vert^2 - 2 * \vec{w}^{sep} \cdot \vec{w}^{T}
 \end{equation}
 \begin{equation}
-\Vert \vec{w}^{sep} \Vert^2 (\Vert \vec{w}^{0} \Vert^2 + T) \geq {(T + \vec{w}^{sep} \cdot \vec{w}^{0})}^2
+\leq \Vert \vec{w}^{sep} \Vert^2 + \Vert \vec{w}^{0} \Vert^2 + T - 2 * (\vec{w}^{sep} \cdot \vec{w}^0 + T)
 \end{equation}
 \begin{equation}
-T^2 + (2 \vec{w}^{sep} \cdot \vec{w}^{0} - \Vert \vec{w}^{sep} \Vert^2)T + {(\vec{w}^{sep} \cdot \vec{w}^{0})}^2 - \Vert \vec{w}^{sep} \Vert^2 \Vert \vec{w}^{0} \Vert^2 \leq 0
+= \Vert \vec{w}^0 - \vec{w}^{sep} \Vert^2 - T
 \end{equation}
+
+So,
 \begin{equation}
-T^2 + (2 \vec{w}^{sep} \cdot \vec{w}^{0} - \vec{w}^{sep} \cdot \vec{w}^{sep})T \leq 0
+T \leq \Vert \vec{w}^0 - \vec{w}^{sep} \Vert^2 - \Vert \vec{w}^{T} - \vec{w}^{sep} \Vert^2 \leq \Vert \vec{w}^0 - \vec{w}^{sep} \Vert^2 \ \ \ \square
 \end{equation}
-\begin{equation}
-0 \leq T \leq \vec{w}^{sep} \cdot \vec{w}^{sep} - 2 \vec{w}^{sep} \cdot \vec{w}^{0}
-\end{equation}
-\begin{equation}
-T \leq \vec{w}^{sep} \cdot \vec{w}^{sep} - 2 \vec{w}^{sep} \cdot \vec{w}^{0} + \vec{w}^0 \cdot \vec{w}^0 = (\vec{w}^{sep} - \vec{w}^0)^2 = \Vert w^{(0)} - w^{sep} \Vert^2_2 \ \ \ \square
-\end{equation}
-The first $\geq$ in step (8) is proven in class, and the second $\geq$ is to plug in the results of steps (4) and (7). Step (11) is because for any vector $\vec{v}$, $\vec{v} \cdot \vec{v} = \Vert \vec{v} \Vert^2$. Step (13) is because $\vec{w}^0 \cdot \vec{w}^0 \geq 0$.
+Step (9) is to plug in the results of steps (4) and (7). Step (11) is because $\Vert \vec{w}^{T} - \vec{w}^{sep} \Vert^2 \geq 0$.
+
 \end{enumerate}
 
 \section{Programming Assignment}
