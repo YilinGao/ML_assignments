@@ -81,7 +81,7 @@
 	
 	If $p \in (1, \infty)$, based on geometry in the 2D space and integration, I get $T = \frac{1}{6} p^{-3} + (\frac{1}{2} - \frac{\pi}{8}) p^{-1} + (1 - \frac{\pi}{4})$. So local optimized $p'' = (1 - \frac{\pi}{4}) ^ {-2}$, and $T'' = \frac{1}{6}(1-\frac{\pi}{4})^6 - \frac{1}{2}(1-\frac{\pi}{4})^3 + (1-\frac{\pi}{4})$.
 	
-	So the global optimized $p^* = p'' = (1 - \frac{\pi}{4}) ^ {-2} \approx \mathbf{2.158655221735395}$, and the corresponding minimal $R^{true}(f) = \frac{1}{6}(1-\frac{\pi}{4})^6 - \frac{1}{2}(1-\frac{\pi}{4})^3 + (1-\frac{\pi}{4}) \approx \mathbf{0.18146363796206844}$.
+	So the global optimized $p^* = p'' = (1 - \frac{\pi}{4}) ^ {-2} \approx \mathbf{2.158655221735395}$, the optimal linear classifier that passes through the origin is $\mathbf{f(x_1, x_2) = -2.1587 * x_1 + 1 * x_2 = 0}$, and the corresponding minimal $R^{true}(f) = \frac{1}{6}(1-\frac{\pi}{4})^6 - \frac{1}{2}(1-\frac{\pi}{4})^3 + (1-\frac{\pi}{4}) \approx \mathbf{0.18146363796206844}$.
 	
 	This solution \textbf{is not} among the solutions that achieved the same loss (0) in part (a).
 	
@@ -151,7 +151,7 @@
 		\frac{3p}{2}]$, $\mathbf{P}(x_2 \leq p x_1 | y = 1) = \frac{p}{8}$, $T = \frac{4p}{64} + \frac{1}{64}$. So the local optimal $p' = 0 $ generates local minimal $T' = \frac{1}{64}$.
 	\end{enumerate}
 
-	So in conclusion, the global optimized $-\frac{w_1}{w_2} = p = \mathbf{0}$, and the corresponding minimal true error rate $R^{true}(f) = \mathbf{\frac{1}{64}}$.
+	So in conclusion, the global optimized $-\frac{w_1}{w_2} = p = \mathbf{0}$, the optimal linear classifier that passes through the origin is $\mathbf{f(x_1, x_2) = x_2 = 0}$, and the corresponding minimal true error rate $R^{true}(f) = \mathbf{\frac{1}{64}}$.
 	
 	\item The optimal depth 2 decision tree will split on $x_1 = m$ and $x_2 = n$. And $f(\mathbf{x}) = -1$ if $m \leq x_1 \leq 1$ and $0 \leq x_2 \leq n$, $f(\mathbf{x}) = 1$ otherwise.
 	
