@@ -46,7 +46,7 @@
 	\item 	Suppose the real optimal linear classifier that passes through the origin is $f(x_1, x_2) = w_1 * x_1 + w_2 * x_2$, such that it is able to minimize $R^{true}(f)$.
 	
 	\begin{equation}
-	R^{true}(f) = \mathbb{E}_{(\mathbf{x}, y) \sim D}l(f(\mathbf{x}), y) = \mathbb{E}_{(\mathbf{x}, y) \sim D} \mathbf{1}_{[sign(f(\mathbf{x})) \neq y]}
+	T = R^{true}(f) = \mathbb{E}_{(\mathbf{x}, y) \sim D}l(f(\mathbf{x}), y) = \mathbb{E}_{(\mathbf{x}, y) \sim D} \mathbf{1}_{[sign(f(\mathbf{x})) \neq y]}
 	\end{equation}
 	\begin{equation}
 	= \mathbf{P}(sign(f(\mathbf{x})) \neq y)
@@ -75,7 +75,7 @@
 	+ \frac{\pi}{4} * \mathbf{P}(x_2 \geq p x_1 | 0 \leq x_1 \leq 1, 0 \leq x_2 \leq \sqrt{x_1}) 
 	\end{equation}
 	
-	So we need to find the optimized $p$ that minimizes $R^{true}(f)$, or equivalently equation (7). We assign $T = R^{true}(f)$.
+	So we need to find the optimized $p$ that minimizes $R^{true}(f)$, or equivalently equation (7).
 	
 	If $p \in [0, 1]$, $T = \frac{\pi}{4} * (\frac{\pi}{4} - \frac{1}{2} * 1 * p)$, and local optimized $p' = 1$ minimizes $T' = \frac{\pi}{4}[\frac{\pi}{4} - \frac{1}{2}]$.
 	
@@ -117,9 +117,52 @@
 	
 	\item 
 	
-	\item 
+	\item For paint, assume the part inside paint ($0.5 \leq x_1 \leq 1$ and $0 \leq x_2 \leq 0.25$) has label $y = -1$ and the part outside paint has $y = 1$.
+	 
+	Same as in part (c), suppose the real optimal linear classifier that passes through the origin is $f(x_1, x_2) = w_1 * x_1 + w_2 * x_2$, such that it is able to minimize $R^{true}(f)$.
 	
-	\item 
+	\begin{equation}
+	T = R^{true}(f) = \mathbf{P}(y = 1) * \mathbf{P}(f(\mathbf{x}) \leq 0 | y = 1) + \mathbf{P}(y = -1) * \mathbf{P}(f(\mathbf{x}) \geq 0 | y = -1)
+	\end{equation}
+	\begin{equation}
+	= \frac{7}{8} * \mathbf{P}(x_2 \leq -\frac{w_1}{w_2} x_1 | y = 1) + \frac{1}{8} * \mathbf{P}(x_2 \geq -\frac{w_1}{w_2} x_1 | y = -1)
+	\end{equation}
+	
+	Assign $p = -\frac{w_1}{w_2}$, $p \in [0, \infty)$,
+	
+	\begin{equation}
+	= \frac{7}{8} * \mathbf{P}(x_2 \leq p x_1 | y = 1) + \frac{1}{8} * \mathbf{P}(x_2 \geq p x_1 | y = -1)
+	\end{equation}
+	
+	If $p \geq \frac{1}{2}$, $\mathbf{P}(x_2 \geq p x_1 | y = -1) = 0$, $T = \frac{7}{8} * \mathbf{P}(x_2 \leq p x_1 | y = 1) $.
+	
+	\begin{enumerate}[label=(\roman*)]
+		\item If $1 \geq p \geq \frac{1}{2}$, $T = \frac{7}{8}[\frac{p}{2} - \frac{1}{8}]$, and local optimized $p' = \frac{1}{2}$ generates local minimal $p' = \frac{7}{64}$.
+		
+		\item If $p > 1$, $T = \frac{7}{8}[\frac{7}{8} - \frac{1}{2p}]$, and local optimized $p' = 1$ generates local minimal $p' = \frac{21}{64}$.
+	\end{enumerate}
+
+	If $\frac{1}{2} > p \geq 0$,
+	
+	\begin{enumerate}[label=(\roman*)]
+		\item If $\frac{1}{2} > p \geq \frac{1}{4}$,  $\mathbf{P}(x_2 \geq p x_1 | y = -1) = \frac{1}{8} (\frac{1}{4p} + p - 1)$, $\mathbf{P}(x_2 \leq p x_1 | y = 1) = \frac{5p}{8} - \frac{1}{4} + \frac{1}{32p}$. $T = \frac{9p}{16} + \frac{1}{32p} - \frac{15}{64}$. So the local optimized $p' = \frac{1}{4}$ generates local minimal $T' = \frac{2}{64}$.
+		
+		\item If $\frac{1}{4} > p \geq 0$, $\mathbf{P}(x_2 \geq p x_1 | y = -1) = \frac{1}{4}[\frac{1}{2} - 
+		\frac{3p}{2}]$, $\mathbf{P}(x_2 \leq p x_1 | y = 1) = \frac{p}{8}$, $T = \frac{4p}{64} + \frac{1}{64}$. So the local optimal $p' = 0 $ generates local minimal $T' = \frac{1}{64}$.
+	\end{enumerate}
+
+	So in conclusion, the global optimized $-\frac{w_1}{w_2} = p = \mathbf{0}$, and the corresponding minimal true error rate $R^{true}(f) = \mathbf{\frac{1}{64}}$.
+	
+	\item The optimal depth 2 decision tree will split on $x_1 = m$ and $x_2 = n$. And $f(\mathbf{x}) = -1$ if $m \leq x_1 \leq 1$ and $0 \leq x_2 \leq n$, $f(\mathbf{x}) = 1$ otherwise.
+	
+	\begin{equation}
+	T = R^{true}(f) = \mathbf{P}(y = 1) * \mathbf{P}(f(\mathbf{x}) \leq 0 | y = 1) + \mathbf{P}(y = -1) * \mathbf{P}(f(\mathbf{x}) \geq 0 | y = -1)
+	\end{equation}
+	\begin{equation}
+	= \frac{7}{8} * \mathbf{P}(f(\mathbf{x}) \leq 0 | y = 1) + \frac{1}{8} * \mathbf{P}(f(\mathbf{x}) \geq 0 | y = -1) \geq 0
+	\end{equation}
+	
+	It's easy to find out that when $\mathbf{m = \frac{1}{2}}$ and $\mathbf{n = \frac{1}{4}}$, both $\mathbf{P}(f(\mathbf{x}) \leq 0 | y = 1)$ and $\mathbf{P}(f(\mathbf{x}) \geq 0 | y = -1) $ are equal to 0, and $T$ achieves its minimal value \textbf{0}.
 	
 \end{enumerate}
 
