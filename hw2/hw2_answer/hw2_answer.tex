@@ -16,6 +16,7 @@
 \section{Classifier for Basketball Courts}
 
 \begin{enumerate}[label=(\alph*)]
+	% 1a
 	\item When running Perceptron algorithm on the dataset, it takes 7 iterations (updates) to converge. The decision boundary is $f(x_1, x_2) = -1.05 * x_1 + 1.1 * x_2$. Because after it converges, all training points are correctly classified, the error rate is 0.
 	
 	Assume another linear classifier that goes through origin and achieves the same training error rate (0) as the perceptron classifier is $f(x_1, x_2) = w_1 * x_1 + w_2 * x_2$. Set $f(x_1, x_2) = 0$, we get the slope of the boundary is $-\frac{w_1}{w_2}$. From the plot of training data, we know that the boundary should go above point $[0.85, 0.80]$, and go below point $[0.85, 0.95]$. So $\frac{0.80}{0.85} < -\frac{w_1}{w_2} < \frac{0.95}{0.85}$. If we set $w_2 = 1.1$ as the perceptron boundary, we get $-1.229 < w_1 < -1.035$.
@@ -24,9 +25,10 @@
 	
 	\includegraphics[scale=0.6]{q1a.png}
 	
+	%1b
 	\item The fully-grown decision tree using Gini index as splitting criterion on the observed data is:
 	
-	\includegraphics[scale=0.6]{q1b_tree.png}
+	\includegraphics[scale=0.5]{q1b_tree.png}
 	
 	Because all training points are correctly classified by this tree, its training error is 0.
 	
@@ -40,9 +42,76 @@
 	
 	\includegraphics[scale=0.6]{q1b2.png}
 	
-	\item 
+	%1c
+	\item 	Suppose the real optimal linear classifier that passes through the origin is $f(x_1, x_2) = w_1 * x_1 + w_2 * x_2$, such that it is able to minimize $R^{true}(f)$.
 	
-	\item 
+	\begin{equation}
+	R^{true}(f) = \mathbb{E}_{(\mathbf{x}, y) \sim D}l(f(\mathbf{x}), y) = \mathbb{E}_{(\mathbf{x}, y) \sim D} \mathbf{1}_{[sign(f(\mathbf{x})) \neq y]}
+	\end{equation}
+	\begin{equation}
+	= \mathbf{P}(sign(f(\mathbf{x})) \neq y)
+	\end{equation}
+	\begin{equation}
+	= \mathbf{P}(y = 1, f(\mathbf{x}) \leq 0) + \mathbf{P}(y = -1, f(\mathbf{x}) \geq 0)
+	\end{equation}
+	\begin{equation}
+	= \mathbf{P}(y = 1) * \mathbf{P}(f(\mathbf{x}) \leq 0 | y = 1) + \mathbf{P}(y = -1) * \mathbf{P}(f(\mathbf{x}) \geq 0 | y = -1)
+	\end{equation}
+	\begin{equation}
+	= (1 - \frac{\pi}{4}) * \mathbf{P}(w_1 * x_1 + w_2 * x_2 \leq 0 | 0 \leq x_1 \leq 1, \sqrt{x_1} \leq x_2 \leq 1) 
+		+ \frac{\pi}{4} * \mathbf{P}(w_1 * x_1 + w_2 * x_2 \geq 0 | 0 \leq x_1 \leq 1, 0 \leq x_2 \leq \sqrt{x_1})
+	\end{equation}
+	\begin{equation}
+	= (1 - \frac{\pi}{4}) * \mathbf{P}(x_2 \leq -\frac{w_1}{w_2} x_1 | 0 \leq x_1 \leq 1, \sqrt{x_1} \leq x_2 \leq 1) 
+	+ \frac{\pi}{4} * \mathbf{P}(x_2 \geq -\frac{w_1}{w_2} x_1 | 0 \leq x_1 \leq 1, 0 \leq x_2 \leq \sqrt{x_1})
+	\end{equation}
+	
+	Step (2) is from the property of expectation on indicator function. Step (4) is from the rule of conditional probability. In step (5), $\mathbf{P}(y = 1) = \frac{\pi}{4}$ and $\mathbf{P}(y = -1) = 1- \frac{\pi}{4}$ because of the uniform distribution of $(x_1, x_2)$.
+	
+	Assign $p = -\frac{w_1}{w_2}$, $p \in [0, \infty)$, equation (6) becomes:
+	
+	\begin{equation}
+	= (1 - \frac{\pi}{4}) * \mathbf{P}(x_2 \leq p x_1 | 0 \leq x_1 \leq 1, \sqrt{x_1} \leq x_2 \leq 1)
+	+ \frac{\pi}{4} * \mathbf{P}(x_2 \geq p x_1 | 0 \leq x_1 \leq 1, 0 \leq x_2 \leq \sqrt{x_1}) 
+	\end{equation}
+	
+	So we need to find the optimized $p$ that minimizes $R^{true}(f)$, or equivalently equation (7). We assign $T = R^{true}(f)$.
+	
+	If $p \in [0, 1]$, $T = \frac{\pi}{4} * (\frac{\pi}{4} - \frac{1}{2} * 1 * p)$, and local optimized $p' = 1$ minimizes $T' = \frac{\pi}{4}[\frac{\pi}{4} - \frac{1}{2}]$.
+	
+	If $p \in (1, \infty)$, based on geometry in the 2D space and integration, I get $T = \frac{1}{6} p^{-3} + (\frac{1}{2} - \frac{\pi}{8}) p^{-1} + (1 - \frac{\pi}{4})$. So local optimized $p'' = (1 - \frac{\pi}{4}) ^ {-2}$, and $T'' = \frac{1}{6}(1-\frac{\pi}{4})^6 - \frac{1}{2}(1-\frac{\pi}{4})^3 + (1-\frac{\pi}{4})$.
+	
+	So the global optimized $p^* = p'' = (1 - \frac{\pi}{4}) ^ {-2} \approx \mathbf{2.158655221735395}$, and the corresponding minimal $R^{true}(f) = \frac{1}{6}(1-\frac{\pi}{4})^6 - \frac{1}{2}(1-\frac{\pi}{4})^3 + (1-\frac{\pi}{4}) \approx \mathbf{0.18146363796206844}$.
+	
+	This solution \textbf{is not} among the solutions that achieved the same loss (0) in part (a).
+	
+	The plot of the decision boundary (blue line) on the basketball court is:
+	
+	\includegraphics[scale=0.6]{q1c.png}
+	
+	%1d
+	\item The optimal depth 2 decision tree will split on $x_1 = m$ and $x_2 = n$. And $f(\mathbf{x}) = -1$ if $m \leq x_1 \leq 1$ and $0 \leq x_2 \leq n$, $f(\mathbf{x}) = 1$ otherwise.
+	
+	\begin{equation}
+	T = R^{true}(f) = \mathbf{P}(y = 1) * \mathbf{P}(f(\mathbf{x}) \leq 0 | y = 1) + \mathbf{P}(y = -1) * \mathbf{P}(f(\mathbf{x}) \geq 0 | y = -1)
+	\end{equation}
+	\begin{equation}
+	= (1 - \frac{\pi}{4}) * \mathbf{P}(f(\mathbf{x}) \leq 0 | y = 1) + \frac{\pi}{4} * \mathbf{P}(f(\mathbf{x}) \geq 0 | y = -1)
+	\end{equation}
+	
+	Step (8) comes from the same steps as in (c).
+	
+	If $0 \leq n \leq \sqrt{m}$, $T = \frac{\pi}{4} [1 - \frac{4}{\pi} (1-m)n] \geq \frac{\pi}{4} [1 - \frac{4}{\pi} (1-m) \sqrt{m}]$. So the local optimized $m' = \frac{1}{3}$, local optimized $n' = \sqrt{m'} = \sqrt{\frac{1}{3}}$, and local minimal $T' = \frac{\pi}{4} - \frac{2}{3}\sqrt{\frac{1}{3}} \approx 0.4004979839376978$.
+	
+	If $\sqrt{m} \leq n \leq 1$, according to geometry in 2D space and integration, $T = \frac{1}{3}n^3 + (\frac{\pi}{4} - 1)mn - \frac{\pi}{4}n + \frac{2}{3} m^{\frac{3}{2}} + \frac{\pi}{6}$. So the local optimized $m'' = \frac{{(4-\pi)}^2}{4^2 + 4(4-\pi) + {\pi}^2} \approx 0.025146138400079843$, local optimized $n'' = (1 - \frac{\pi}{4})m'' + \frac{\pi}{4} \approx 0.8892663104388737$, and the local minimal $T'' \approx 0.0574391669843608$.
+	
+	So the global optimized $m^*= \frac{{(4-\pi)}^2}{4^2 + 4(4-\pi) + {\pi}^2} \approx \mathbf{0.025146138400079843}$, the global optimized $n^* = (1 - \frac{\pi}{4})m'' + \frac{\pi}{4} \approx \mathbf{0.8892663104388737}$, and the global minimal $R^{true}(f) \approx \mathbf{0.0574391669843608}$.
+	
+	The real optimized tree decision boundary \textbf{is not} among those achieved in part (b).
+	
+	The plot of the decision boundary (blue line) on the basketball court is:
+	
+	\includegraphics[scale=0.6]{q1d.png}
 	
 	\item 
 	
