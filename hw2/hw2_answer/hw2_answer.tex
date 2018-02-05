@@ -5,6 +5,8 @@
 \graphicspath{{images/}}
 \usepackage{amssymb}
 \usepackage{enumitem}
+\usepackage{multirow}
+\usepackage{longtable}
 
 %opening
 \title{Compsci 571 HW2}
@@ -214,25 +216,29 @@
 		
 		\item Variable importance measures from equation (2) are:
 		
-		\begin{tabular}{|c|c|}
-			\hline
-			$X_1$ & $0.2706$ \\ \hline
-			$X_2$ & NA \\ \hline
-			$X_3$ & NA \\ \hline
-			$X_4$ & NA \\ \hline
-			$X_5$ & NA \\ \hline
-		\end{tabular}
-		
+		\begin{center}
+			\begin{tabular}{|c|c|}
+				\hline
+				$X_1$ & $0.2706$ \\ \hline
+				$X_2$ & NA \\ \hline
+				$X_3$ & NA \\ \hline
+				$X_4$ & NA \\ \hline
+				$X_5$ & NA \\ \hline
+			\end{tabular}
+		\end{center}
+			
 		Variable importance measures from equation (3) are:
 		
-		\begin{tabular}{|c|c|}
-			\hline
-			$X_1$ & $0.2706$ \\ \hline
-			$X_2$ & $0.1058$ \\ \hline
-			$X_3$ & NA \\ \hline
-			$X_4$ & NA \\ \hline
-			$X_5$ & NA \\ \hline
-		\end{tabular}
+		\begin{center}
+			\begin{tabular}{|c|c|}
+				\hline
+				$X_1$ & $0.2706$ \\ \hline
+				$X_2$ & $0.1058$ \\ \hline
+				$X_3$ & NA \\ \hline
+				$X_4$ & NA \\ \hline
+				$X_5$ & NA \\ \hline
+			\end{tabular}
+		\end{center}
 	
 		(See code for calculation process)
 	
@@ -251,18 +257,222 @@
 
 	\item 
 	\begin{enumerate}[label=(\roman*)]
-		\item 
+		\item The table for best split variable for each $K$ is:
 		
-		\item 
+		\begin{center}
+			\begin{longtable}{|c|c|c|}
+				\hline
+				$K$ & variable & time as best split variable (out of 1000) \\ \hline
+				\multirow{5}{1em}{1} & $X_1$ & 223 \\ 
+				& $X_2$ & 185 \\
+				& $X_3$ & 196 \\
+				& $X_4$ & 210 \\
+				& $X_5$ & 186 \\
+				\hline
+				\multirow{5}{1em}{2} & $X_1$ & 368 \\ 
+				& $X_2$ & 290 \\
+				& $X_3$ & 134 \\
+				& $X_4$ & 128 \\
+				& $X_5$ & 80 \\
+				\hline
+				\multirow{5}{1em}{3} & $X_1$ & 488 \\ 
+				& $X_2$ & 293 \\
+				& $X_3$ & 96 \\
+				& $X_4$ & 79 \\
+				& $X_5$ & 44 \\
+				\hline
+				\multirow{5}{1em}{4} & $X_1$ & 578 \\ 
+				& $X_2$ & 289 \\
+				& $X_3$ & 58 \\
+				& $X_4$ & 54 \\
+				& $X_5$ & 21 \\
+				\hline
+				\multirow{5}{1em}{5} & $X_1$ & 672 \\ 
+				& $X_2$ & 256 \\
+				& $X_3$ & 27 \\
+				& $X_4$ & 31 \\
+				& $X_5$ & 14 \\
+				\hline
+			\end{longtable}
+		\end{center}	
 		
-		\item 
+		The table for best split surrogate split variable for each $K$ is:
+		
+		\begin{center}
+			\begin{longtable}{|c|c|c|}
+				\hline
+				$K$ & variable & time as best surrogate split variable (out of 1000) \\ \hline
+				\multirow{5}{1em}{1} & $X_1$ & 0 \\ 
+				& $X_2$ & 0 \\
+				& $X_3$ & 0 \\
+				& $X_4$ & 0 \\
+				& $X_5$ & 0 \\
+				\hline
+				\multirow{5}{1em}{2} & $X_1$ & 38 \\ 
+				& $X_2$ & 108 \\
+				& $X_3$ & 269 \\
+				& $X_4$ & 273 \\
+				& $X_5$ & 312 \\
+				\hline
+				\multirow{5}{1em}{3} & $X_1$ & 104 \\ 
+				& $X_2$ & 261 \\
+				& $X_3$ & 206 \\
+				& $X_4$ & 176 \\
+				& $X_5$ & 253 \\
+				\hline
+				\multirow{5}{1em}{4} & $X_1$ & 195 \\ 
+				& $X_2$ & 333 \\
+				& $X_3$ & 180 \\
+				& $X_4$ & 116 \\
+				& $X_5$ & 176 \\
+				\hline
+				\multirow{5}{1em}{5} & $X_1$ & 242 \\ 
+				& $X_2$ & 412 \\
+				& $X_3$ & 124 \\
+				& $X_4$ & 53 \\
+				& $X_5$ & 169 \\
+				\hline
+			\end{longtable}
+		\end{center}
+	
+		According to best split variable, $X_1$ is selected as the best split variable more as $K$ increases. So this suggests variable $X_1$ is more important than others.
+		
+		And according to best surrogate split variable, $X_2$ is selected more as $K$ increases. So this suggests while $X_1$ is important, the importance of $X_2$ could have been masked by that of $X_1$. So we also need to consider the importance of $X_2$.
+		
+		\item The variable importance according to equations (5) and (6) for each $K$ is:
+		
+		\begin{longtable}{|c|c|c|c|}
+			\hline
+			$K$ & variable & variable importance (5) & variable importance (6) \\ \hline
+			\multirow{5}{1em}{1} & $X_1$ & 0.317459 & \\ 
+			& $X_2$ & 0.185158 & \\
+			& $X_3$ & 0.086647 & \\
+			& $X_4$ & 0.100492 & \\
+			& $X_5$ & 0.091785 & \\
+			\hline
+			\multirow{5}{1em}{2} & $X_1$ & 0.316218 & \\ 
+			& $X_2$ & 0.184409 & \\
+			& $X_3$ & 0.087232 & \\
+			& $X_4$ & 0.100509 & \\
+			& $X_5$ & 0.091449 & \\
+			\hline
+			\multirow{5}{1em}{3} & $X_1$ & 0.316162 & \\ 
+			& $X_2$ & 0.185297 & \\
+			& $X_3$ & 0.087645 & \\
+			& $X_4$ & 0.100699 & \\
+			& $X_5$ & 0.091544 & \\
+			\hline
+			\multirow{5}{1em}{4} & $X_1$ & 0.316481 & \\ 
+			& $X_2$ & 0.185115 & \\
+			& $X_3$ & 0.087517 & \\
+			& $X_4$ & 0.100573 & \\
+			& $X_5$ & 0.091798 & \\
+			\hline
+			\multirow{5}{1em}{5} & $X_1$ & 0.315904 & \\ 
+			& $X_2$ & 0.184598 & \\
+			& $X_3$ & 0.087999 &\\
+			& $X_4$ & 0.101263 & \\
+			& $X_5$ & 0.091400 & \\
+			\hline
+		\end{longtable}
+		
+		%TODO masking
+		
+		\item The mean squares loss on the test data using the random forest with 2 methods:
+		
+		\begin{center}
+			\begin{tabular}{|c|c|c|}
+				\hline
+				$K$ & method 1 & method 2 \\ \hline
+				1 &  & \\ \hline
+				2 &  & \\ \hline
+				3 &  & \\ \hline
+				4 &  & \\ \hline
+				5 &  & \\ \hline
+			\end{tabular}
+		\end{center}
+		
+		%TODO which method is correct for random forest
 	\end{enumerate}
 
 	\item 
 	\begin{enumerate}[label=(\roman*)]
-		\item 
+		\item The variable importance according to equations (5) and (6) for each $q$ is:
 		
-		\item
+		\begin{longtable}{|c|c|c|c|}
+			\hline
+			$q$ & variable & variable importance (5) & variable importance (6) \\ \hline
+			\multirow{5}{1em}{0.4} & $X_1$ & 0.406475 & \\ 
+			& $X_2$ & 0.342298 & \\
+			& $X_3$ & 0.287157 & \\
+			& $X_4$ & 0.299625 & \\
+			& $X_5$ & 0.290382 & \\
+			\hline
+			\multirow{5}{1em}{0.5} & $X_1$ & 0.383594 & \\ 
+			& $X_2$ & 0.302990 & \\
+			& $X_3$ & 0.237279 & \\
+			& $X_4$ & 0.249938 & \\
+			& $X_5$ & 0.240827 & \\
+			\hline
+			\multirow{5}{1em}{0.6} & $X_1$ & 0.361578 & \\ 
+			& $X_2$ & 0.263266 & \\
+			& $X_3$ & 0.187936 & \\
+			& $X_4$ & 0.200152 & \\
+			& $X_5$ & 0.191461 & \\
+			\hline
+			\multirow{5}{1em}{0.7} & $X_1$ & 0.339114 & \\ 
+			& $X_2$ & 0.224404 & \\
+			& $X_3$ & 0.136833 & \\
+			& $X_4$ & 0.150833 & \\
+			& $X_5$ & 0.141829 & \\
+			\hline
+			\multirow{5}{1em}{0.8} & $X_1$ & 0.316477 & \\ 
+			& $X_2$ & 0.184955 & \\
+			& $X_3$ & 0.087182 &\\
+			& $X_4$ & 0.100499 & \\
+			& $X_5$ & 0.092076 & \\
+			\hline
+		\end{longtable}
+		
+		%TODO 
+		From the results, 
+		
+		\item The standard deviation of variable importance according to equations (5) and (6) for each $q$ is:
+		
+		\begin{longtable}{|c|c|c|c|}
+			\hline
+			$q$ & variable & std (5) & std (6) \\ \hline
+			\multirow{5}{1em}{0.4} & $X_1$ & 0.01137653 & \\ 
+			& $X_2$ & 0.00949841 & \\
+			& $X_3$ & 0.00916807 & \\
+			& $X_4$ & 0.00306012 & \\
+			& $X_5$ & 0.00746454 & \\
+			\hline
+			\multirow{5}{1em}{0.5} & $X_1$ & 0.01164611 & \\ 
+			& $X_2$ & 0.00982521 & \\
+			& $X_3$ & 0.00777255 & \\
+			& $X_4$ & 0.00330059 & \\
+			& $X_5$ & 0.00602257 & \\
+			\hline
+			\multirow{5}{1em}{0.6} & $X_1$ & 0.01104073 & \\ 
+			& $X_2$ & 0.00930425 & \\
+			& $X_3$ & 0.0057956 & \\
+			& $X_4$ & 0.00211394 & \\
+			& $X_5$ & 0.00434062 & \\
+			\hline
+			\multirow{5}{1em}{0.7} & $X_1$ & 0.01024229 & \\ 
+			& $X_2$ & 0.00865117 & \\
+			& $X_3$ & 0.00500432 & \\
+			& $X_4$ & 0.00177119 & \\
+			& $X_5$ & 0.00424676 & \\
+			\hline
+			\multirow{5}{1em}{0.8} & $X_1$ & 0.00910605 & \\ 
+			& $X_2$ & 0.00715279 & \\
+			& $X_3$ & 0.00380045 &\\
+			& $X_4$ & 0.00121756 & \\
+			& $X_5$ & 0.00330985 & \\
+			\hline
+		\end{longtable}
 	\end{enumerate}
 \end{enumerate}
 \end{document}
