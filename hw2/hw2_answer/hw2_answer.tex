@@ -21,7 +21,7 @@
 	% 1a
 	\item When running Perceptron algorithm on the dataset, it takes 7 iterations (updates) to converge. The decision boundary is $f(x_1, x_2) = -1.05 * x_1 + 1.1 * x_2$. Because after it converges, all training points are correctly classified, the error rate is 0.
 	
-	Assume another linear classifier that goes through origin and achieves the same training error rate (0) as the perceptron classifier is $f(x_1, x_2) = w_1 * x_1 + w_2 * x_2$. Set $f(x_1, x_2) = 0$, we get the slope of the boundary is $-\frac{w_1}{w_2}$. From the plot of training data, we know that the boundary should go above point $[0.85, 0.80]$, and go below point $[0.85, 0.95]$. So $\frac{0.80}{0.85} < -\frac{w_1}{w_2} < \frac{0.95}{0.85}$. If we set $w_2 = 1.1$ as the perceptron boundary, we get $-1.229 < w_1 < -1.035$.
+	Assume another linear classifier that goes through origin and achieves the same training error rate (0) as the perceptron classifier is $f(x_1, x_2) = w_1 * x_1 + w_2 * x_2$. Set $f(x_1, x_2) = 0$, we get the slope of the boundary is $-\frac{w_1}{w_2}$. From the plot of training data, we know that the boundary should go above point $[0.85, 0.80]$, and go below point $[0.85, 0.95]$. So $\frac{0.80}{0.85} < -\frac{w_1}{w_2} < \frac{0.95}{0.85}$. If we set $w_2 = 1$, we get $ -1.12< w_1 < -0.94$.
 	
 	The plot of observed data, the perceptron decision boundary (the light blue line), and all other linear boundaries that achieve the same training error (the yellow area) is:
 	
@@ -57,33 +57,32 @@
 	= \mathbf{P}(y = 1, f(\mathbf{x}) \leq 0) + \mathbf{P}(y = -1, f(\mathbf{x}) \geq 0)
 	\end{equation}
 	\begin{equation}
-	= \mathbf{P}(y = 1) * \mathbf{P}(f(\mathbf{x}) \leq 0 | y = 1) + \mathbf{P}(y = -1) * \mathbf{P}(f(\mathbf{x}) \geq 0 | y = -1)
+	= \mathbf{P}(w_1  x_1 + w_2 x_2 \leq 0, 0 \leq x_1 \leq 1, \sqrt{x_1} \leq x_2 \leq 1) 
+		+ \mathbf{P}(w_1 x_1 + w_2 x_2 \geq 0,  0 \leq x_1 \leq 1, 0 \leq x_2 \leq \sqrt{x_1})
 	\end{equation}
 	\begin{equation}
-	= (1 - \frac{\pi}{4}) * \mathbf{P}(w_1 * x_1 + w_2 * x_2 \leq 0 | 0 \leq x_1 \leq 1, \sqrt{x_1} \leq x_2 \leq 1) 
-		+ \frac{\pi}{4} * \mathbf{P}(w_1 * x_1 + w_2 * x_2 \geq 0 | 0 \leq x_1 \leq 1, 0 \leq x_2 \leq \sqrt{x_1})
-	\end{equation}
-	\begin{equation}
-	= (1 - \frac{\pi}{4}) * \mathbf{P}(x_2 \leq -\frac{w_1}{w_2} x_1 | 0 \leq x_1 \leq 1, \sqrt{x_1} \leq x_2 \leq 1) 
-	+ \frac{\pi}{4} * \mathbf{P}(x_2 \geq -\frac{w_1}{w_2} x_1 | 0 \leq x_1 \leq 1, 0 \leq x_2 \leq \sqrt{x_1})
+	= \mathbf{P}(x_2 \leq -\frac{w_1}{w_2} x_1,  0 \leq x_1 \leq 1, \sqrt{x_1} \leq x_2 \leq 1) 
+	+  \mathbf{P}(x_2 \geq -\frac{w_1}{w_2} x_1, 0 \leq x_1 \leq 1, 0 \leq x_2 \leq \sqrt{x_1})
 	\end{equation}
 	
-	Step (2) is from the property of expectation on indicator function. Step (4) is from the rule of conditional probability. In step (5), $\mathbf{P}(y = 1) = \frac{\pi}{4}$ and $\mathbf{P}(y = -1) = 1- \frac{\pi}{4}$ because of the uniform distribution of $(x_1, x_2)$.
+	Step (2) is from the property of expectation on indicator function. 
 	
-	Assign $p = -\frac{w_1}{w_2}$, $p \in [0, \infty)$, equation (6) becomes:
+	Assign $k = -\frac{w_1}{w_2}$, $k \in [0, \infty)$, equation (5) becomes:
 	
 	\begin{equation}
-	= (1 - \frac{\pi}{4}) * \mathbf{P}(x_2 \leq p x_1 | 0 \leq x_1 \leq 1, \sqrt{x_1} \leq x_2 \leq 1)
-	+ \frac{\pi}{4} * \mathbf{P}(x_2 \geq p x_1 | 0 \leq x_1 \leq 1, 0 \leq x_2 \leq \sqrt{x_1}) 
+	= \mathbf{P}(x_2 \leq k x_1, 0 \leq x_1 \leq 1, \sqrt{x_1} \leq x_2 \leq 1)
+	+ \mathbf{P}(x_2 \geq k x_1, 0 \leq x_1 \leq 1, 0 \leq x_2 \leq \sqrt{x_1}) 
 	\end{equation}
 	
-	So we need to find the optimized $p$ that minimizes $R^{true}(f)$, or equivalently equation (7).
+	So we need to find the optimized $k$ that minimizes $R^{true}(f)$, or equivalently equation (6).
 	
-	If $p \in [0, 1]$, $T = \frac{\pi}{4} * (\frac{\pi}{4} - \frac{1}{2} * 1 * p)$, and local optimized $p' = 1$ minimizes $T' = \frac{\pi}{4}[\frac{\pi}{4} - \frac{1}{2}]$.
+	Because $(x_1, x_2)$ follow a uniform distribution, the 2 probability values in equation (6) are just areas formed by the border lines. We could use integration to compute them. (Here I use Python packages to compute the optimized values, see code for details.)
 	
-	If $p \in (1, \infty)$, based on geometry in the 2D space and integration, I get $T = \frac{1}{6} p^{-3} + (\frac{1}{2} - \frac{\pi}{8}) p^{-1} + (1 - \frac{\pi}{4})$. So local optimized $p'' = (1 - \frac{\pi}{4}) ^ {-2}$, and $T'' = \frac{1}{6}(1-\frac{\pi}{4})^6 - \frac{1}{2}(1-\frac{\pi}{4})^3 + (1-\frac{\pi}{4})$.
+	If $k \in [0, 1]$, local optimized $k' = 1$ minimizes $T' =\frac{\pi}{4} - \frac{1}{2}$.
 	
-	So the global optimized $p^* = p'' = (1 - \frac{\pi}{4}) ^ {-2} \approx \mathbf{2.158655221735395}$, the optimal linear classifier that passes through the origin is $\mathbf{f(x_1, x_2) = -2.1587 * x_1 + 1 * x_2 = 0}$, and the corresponding minimal $R^{true}(f) = \frac{1}{6}(1-\frac{\pi}{4})^6 - \frac{1}{2}(1-\frac{\pi}{4})^3 + (1-\frac{\pi}{4}) \approx \mathbf{0.18146363796206844}$.
+	If $k \in (1, \infty)$, local optimized $k'' = 1.4142$, and $T'' = 0.09763107$.
+	
+	So the global optimized $k^* = k'' = 1.4142$, the optimal linear classifier that passes through the origin is $\mathbf{f(x_1, x_2) = -1.4142 * x_1 + 1 * x_2 = 0}$, and the corresponding minimal $R^{true}(f) = 0.09763107$.
 	
 	This solution \textbf{is not} among the solutions that achieved the same loss (0) in part (a).
 	
@@ -92,28 +91,46 @@
 	\includegraphics[scale=0.6]{q1c.png}
 	
 	%1d
-	\item The optimal depth 2 decision tree will split on $x_1 = m$ and $x_2 = n$. And $f(\mathbf{x}) = -1$ if $m \leq x_1 \leq 1$ and $0 \leq x_2 \leq n$, $f(\mathbf{x}) = 1$ otherwise.
-	
+	\item 
 	\begin{equation}
-	T = R^{true}(f) = \mathbf{P}(y = 1) * \mathbf{P}(f(\mathbf{x}) \leq 0 | y = 1) + \mathbf{P}(y = -1) * \mathbf{P}(f(\mathbf{x}) \geq 0 | y = -1)
-	\end{equation}
-	\begin{equation}
-	= (1 - \frac{\pi}{4}) * \mathbf{P}(f(\mathbf{x}) \leq 0 | y = 1) + \frac{\pi}{4} * \mathbf{P}(f(\mathbf{x}) \geq 0 | y = -1)
+	T = R^{true}(f) = \mathbf{P}(f(\mathbf{x}) \leq 0,  y = 1) + \mathbf{P}(f(\mathbf{x}) \geq 0,  y = -1)
 	\end{equation}
 	
-	Step (8) comes from the same steps as in (c).
+	For tree 1 which starts splitting on $X_1$, there are 4 different conditions regarding $s_1, s_2, s_3$:
 	
-	If $0 \leq n \leq \sqrt{m}$, $T = \frac{\pi}{4} [1 - \frac{4}{\pi} (1-m)n] \geq \frac{\pi}{4} [1 - \frac{4}{\pi} (1-m) \sqrt{m}]$. So the local optimized $m' = \frac{1}{3}$, local optimized $n' = \sqrt{m'} = \sqrt{\frac{1}{3}}$, and local minimal $T' = \frac{\pi}{4} - \frac{2}{3}\sqrt{\frac{1}{3}} \approx 0.4004979839376978$.
+	If $0 \leq s_2 < \sqrt{s_1}$ and $\sqrt{s_1} < s_3 \leq 1$, $\min_{s_1, s_2, s_3} T = \int_{0}^{s_2^2} (s_2 - \sqrt{x}) dx + \int_{s_2^2}^{s_1} (\sqrt{x} - s_2) dx + \int_{s_1}^{s_3^2} (s_3 - \sqrt{x}) dx + \int_{s_3^2}^{1} (\sqrt{x} - s_3) dx$
 	
-	If $\sqrt{m} \leq n \leq 1$, according to geometry in 2D space and integration, $T = \frac{1}{3}n^3 + (\frac{\pi}{4} - 1)mn - \frac{\pi}{4}n + \frac{2}{3} m^{\frac{3}{2}} + \frac{\pi}{6}$. So the local optimized $m'' = \frac{{(4-\pi)}^2}{4^2 + 4(4-\pi) + {\pi}^2} \approx 0.025146138400079843$, local optimized $n'' = (1 - \frac{\pi}{4})m'' + \frac{\pi}{4} \approx 0.8892663104388737$, and the local minimal $T'' \approx 0.0574391669843608$.
+	If $0 \leq s_2 < \sqrt{s_1}$ and $0 \leq s_3 \leq \sqrt{s_1}$, $\min_{s_1, s_2, s_3} T = \int_{0}^{s_2^2} (s_2 - \sqrt{x}) dx + \int_{s_2^2}^{s_1} (\sqrt{x} - s_2) dx + \int_{s_1}^{1} (\sqrt{x} - s_3) dx = \min_{s_1, s_2, s_3 = \sqrt{s_1}} (\int_{0}^{s_2^2} (s_2 - \sqrt{x}) dx + \int_{s_2^2}^{s_1} (\sqrt{x} - s_2) dx + \int_{s_1}^{1} (\sqrt{x} - \sqrt{s_1} dx)$
 	
-	So the global optimized $m^*= \frac{{(4-\pi)}^2}{4^2 + 4(4-\pi) + {\pi}^2} \approx \mathbf{0.025146138400079843}$, the global optimized $n^* = (1 - \frac{\pi}{4})m'' + \frac{\pi}{4} \approx \mathbf{0.8892663104388737}$, and the global minimal $R^{true}(f) \approx \mathbf{0.0574391669843608}$.
+	If $\sqrt{s_1} \leq s_2 \leq 1$ and $\sqrt{s_1} < s_3 \leq 1$, $\min_{s_1, s_2, s_3} T = \int_{0}^{s_1} (s_2 - \sqrt{x}) dx + \int_{s_1}^{s_3^2} (s_3 - \sqrt{x}) dx + \int_{s_3^2}^{1} (\sqrt{x} - s_3) dx = \min_{s_1, s_2 = \sqrt{s_1}, s_3} (\int_{0}^{s_1} (\sqrt{s_1} - \sqrt{x}) dx + \int_{s_1}^{s_3^2} (s_3 - \sqrt{x}) dx + \int_{s_3^2}^{1} (\sqrt{x} - s_3) dx)$
+	
+	If $\sqrt{s_1} \leq s_2 \leq 1$ and $0 \leq s_3 \leq \sqrt{s_1}$, $\min_{s_1, s_2, s_3} T = \int_{0}^{s_1} (s_2 - \sqrt{x}) dx + \int_{s_1}^{1} (\sqrt{x} - s_3) dx = \min_{s_1, s_2 = \sqrt{s_1}, s_3 = \sqrt{s_1}} (\int_{0}^{s_1} (\sqrt{s_1} - \sqrt{x}) dx + \int_{s_1}^{1} (\sqrt{x} - \sqrt{s_1}) dx)$
+	
+	The global optimized solutions are $\mathbf{s_1 = 0.42677801, s_2 = 0.46194124, s_3 = 0.84462275}$ which gives minimal  $R^{true}(f) = \mathbf{0.1035845342551841}$. (See code for calculation details.)
 	
 	The real optimized tree decision boundary \textbf{is not} among those achieved in part (b).
 	
 	The plot of the decision boundary (blue line) on the basketball court is:
 	
-	\includegraphics[scale=0.6]{q1d.png}
+	\includegraphics[scale=0.6]{q1d1.png}
+	
+	For the tree which starts splitting from $X_2$, there are also 4 different conditions regarding $s_1, s_2, s_3$:
+	
+	If $0 \leq s_2 < s_1^2$ and $s_1^2 < s_3 \leq 1$, $\min_{s_1, s_2, s_3} T = \int_{0}^{s_2} \sqrt{x} dx + \int_{s_2}^{s_1^2} (s_1 - \sqrt{x}) dx + \int_{s_1^2}^{s_3} (\sqrt{x} - s_1) dx + \int_{s_3}^{1} (1 - \sqrt{x}) dx$
+	
+	If $ s_1^2 \leq s_2 \leq 1$ and $s_1^2 < s_3 \leq 1$, $\min_{s_1, s_2 = s_1^2, s_3} T = \int_{0}^{s_1^2} \sqrt{x} dx + \int_{s_1^2}^{s_3} (\sqrt{x} - s_1) dx + \int_{s_3}^{1} (1 - \sqrt{x}) dx$
+	
+	If $0 \leq s_2 < s_1^2$ and $0 \leq s_3 \leq s_1^2$, $\min_{s_1, s_2, s_3 = s_1^2} T = \int_{0}^{s_2} \sqrt{x} dx + \int_{s_2}^{s_1^2} (s_1 - \sqrt{x}) dx + \int_{s_1^2}^{1} (1 - \sqrt{x}) dx$
+	
+	If $ s_1^2 \leq s_2 \leq 1$  and $0 \leq s_3 \leq s_1^2$, $\min_{s_1, s_2 = s_1^2, s_3 = s_1^2} T = \int_{0}^{s_1^2} \sqrt{x} dx + \int_{s_1^2}^{1} (1 - \sqrt{x}) dx$
+	
+	The global optimized solutions are $\mathbf{s_1 = 0.60762617, s_2 = 0.09230456, s_3 = 0.64611553}$ which gives minimal  $R^{true}(f) = \mathbf{0.11796176307566364}$. (See code for calculation details.)
+	
+	The real optimized tree decision boundary \textbf{is not} among those achieved in part (b).
+	
+	The plot of the decision boundary (blue line) on the basketball court is:
+	
+	\includegraphics[scale=0.6]{q1d2.png}
 	
 	%1e
 	\item Transform $x_2$ into $\mathbf{x_2^* = x_2^2}$. So now $x_1 \in [0, 1]$, $x_2^* \in [0, 1]$, and the true boundary for the 3-point line is $x_2^* = x_1$.
@@ -121,78 +138,57 @@
 	Suppose the real optimal linear classifier that passes through the origin is $f(x_1, x_2^*) = w_1 x_1 + w_2^* x_2^*$.
 	
 	\begin{equation}
-	T = R^{true}(f) = \mathbf{P}(y = 1) * \mathbf{P}(f(\mathbf{x^*}) \leq 0 | y = 1) + \mathbf{P}(y = -1) * \mathbf{P}(f(\mathbf{x^*}) \geq 0 | y = -1) 
+	T = R^{true}(f) =  \mathbf{P}(f(\mathbf{x^*}) \leq 0, y = 1) + \mathbf{P}(f(\mathbf{x^*}) \geq 0, y = -1) 
 	\end{equation}
 	\begin{equation}
-	= \frac{1}{2} \mathbf{P}(x_2^* \leq -\frac{w_1}{w_2^*} x_1 | 0 \leq x_1 \leq 1, x_2^* \geq x_1) + \frac{1}{2} \mathbf{P}(x_2^* \geq -\frac{w_1}{w_2^*} x_1 | 0 \leq x_1 \leq 1, x_2^* \leq x_1) 
+	= \mathbf{P}(x_2^* \leq -\frac{w_1}{w_2^*} x_1, 0 \leq x_1 \leq 1, x_2^* \geq x_1) + \mathbf{P}(x_2^* \geq -\frac{w_1}{w_2^*} x_1, 0 \leq x_1 \leq 1, x_2^* \leq x_1) 
 	\end{equation}
 	
 	And it is easy to find out that the optimal value of $\mathbf{-\frac{w_1}{w_2^*} = 1}$, the optimal linear classifier that passes through the origin is $\mathbf{f(x_1, x_2^*) = -x_1 + x_2^* = 0}$, and the corresponding minimal true error is \textbf{0}.
 	
 	%1f
-	\item With the same transformation of $x_2$ as in part (e), suppose the optimal depth 2 decision tree splits on $x_1 = m$ and $x_2^* = n$, $R^{real}(f)$ goes as following:
-	
-	\begin{equation}
-	T = R^{true}(f) = \mathbf{P}(y = 1) * \mathbf{P}(f(\mathbf{x^*}) \leq 0 | y = 1) + \mathbf{P}(y = -1) * \mathbf{P}(f(\mathbf{x^*}) \geq 0 | y = -1) 
-	\end{equation}
-	\begin{equation}
-	= \frac{1}{2} * \mathbf{P}(f(\mathbf{x^*}) \leq 0 | y = 1) + \frac{1}{2} * \mathbf{P}(f(\mathbf{x^*}) \geq 0 | y = -1) 
-	\end{equation}
-	
-	If $0 \leq n \leq m \leq 1$, $\mathbf{P}(f(\mathbf{x^*}) \leq 0 | y = 1) = 0$, $T = \frac{1}{2} [\frac{1}{2} - n(1-m)] \geq \frac{1}{2}[1-m(1-m)]$. So the local optimal $m' = \frac{1}{2}$, the local optimal $n' = \frac{1}{2}$, and the corresponding local minimal $T' = \frac{1}{8}$.
-	
-	If $0 \leq m < n \leq 1$, $\mathbf{P}(f(\mathbf{x^*}) \leq 0 | y = 1) = \frac{1}{2} {(n - m)}^2$, $\mathbf{P}(f(\mathbf{x^*}) \geq 0 | y = -1) = \frac{1}{2} m^2 + \frac{1}{2} {(1-n)}^2$, $T = \frac{1}{4}[{(n-m)}^2 + m^2 + {(1-n)}^2]$. The local optimized $m' = \frac{1}{3}$, $n' = \frac{2}{3}$, and the corresponding $T' = \frac{5}{24}$.
-	
-	So the global minimal true risk generated by a depth 2 decision tree under this transformation is $\frac{1}{8}$. The decision tree \textbf{cannot} achieve the same minimal true error (0) as the linear classifier in part (e).
+	\item With the same transformation of $x_2$ as in part (e), a decision tree \textbf{cannot} achieve the same minimal true error (0) as the linear classifier in part (e). This is because the splitting boundary of decision tree can never be a line going through the origin.
 	
 	%1g
 	\item For paint, assume the part inside paint ($0.5 \leq x_1 \leq 1$ and $0 \leq x_2 \leq 0.25$) has label $y = -1$ and the part outside paint has $y = 1$.
 	 
-	Same as in part (c), suppose the real optimal linear classifier that passes through the origin is $f(x_1, x_2) = w_1 * x_1 + w_2 * x_2$, such that it is able to minimize $R^{true}(f)$.
+	Same as in part (c), suppose the real optimal linear classifier that passes through the origin is $f(x_1, x_2) = w_1 x_1 + w_2 x_2$, such that it is able to minimize $R^{true}(f)$.
 	
 	\begin{equation}
-	T = R^{true}(f) = \mathbf{P}(y = 1) * \mathbf{P}(f(\mathbf{x}) \leq 0 | y = 1) + \mathbf{P}(y = -1) * \mathbf{P}(f(\mathbf{x}) \geq 0 | y = -1)
+	T = R^{true}(f) = \mathbf{P}(f(\mathbf{x}) \leq 0, y = 1) + \mathbf{P}(f(\mathbf{x}) \geq 0, y = -1)
 	\end{equation}
 	\begin{equation}
-	= \frac{7}{8} * \mathbf{P}(x_2 \leq -\frac{w_1}{w_2} x_1 | y = 1) + \frac{1}{8} * \mathbf{P}(x_2 \geq -\frac{w_1}{w_2} x_1 | y = -1)
+	= \mathbf{P}(x_2 \leq -\frac{w_1}{w_2} x_1, y = 1) +\mathbf{P}(x_2 \geq -\frac{w_1}{w_2} x_1, y = -1)
 	\end{equation}
 	
-	Assign $p = -\frac{w_1}{w_2}$, $p \in [0, \infty)$,
+	Assign $k = -\frac{w_1}{w_2}$, $k \in [0, \infty)$,
 	
 	\begin{equation}
-	= \frac{7}{8} * \mathbf{P}(x_2 \leq p x_1 | y = 1) + \frac{1}{8} * \mathbf{P}(x_2 \geq p x_1 | y = -1)
+	=\mathbf{P}(x_2 \leq k x_1, y = 1) + \mathbf{P}(x_2 \geq k x_1, y = -1)
 	\end{equation}
 	
-	If $p \geq \frac{1}{2}$, $\mathbf{P}(x_2 \geq p x_1 | y = -1) = 0$, $T = \frac{7}{8} * \mathbf{P}(x_2 \leq p x_1 | y = 1) $.
+	If $k \in [\frac{1}{2}, \infty)$, local optimized $k' = \frac{1}{2}$ minimizes $T' = \frac{1}{8}$.
 	
-	\begin{enumerate}[label=(\roman*)]
-		\item If $1 \geq p \geq \frac{1}{2}$, $T = \frac{7}{8}[\frac{p}{2} - \frac{1}{8}]$, and local optimized $p' = \frac{1}{2}$ generates local minimal $p' = \frac{7}{64}$.
-		
-		\item If $p > 1$, $T = \frac{7}{8}[\frac{7}{8} - \frac{1}{2p}]$, and local optimized $p' = 1$ generates local minimal $p' = \frac{21}{64}$.
-	\end{enumerate}
+	If $k \in (\frac{1}{4}, \frac{1}{2})$, $min_{k} T = \int_{0}^{\frac{1}{2}} kx dx + \int_{\frac{1}{2}}^{\frac{1}{4k}} (\frac{1}{4} - kx) dx$. And the local optimized $k'' = 	0.35355341$ minimizes $T'' = 0.0517766952966372$.
+	
+	If $k \in [0, \frac{1}{4}]$, $min_{k} T = \int_{0}^{\frac{1}{2}} kx dx + \int_{\frac{1}{2}}^{1}(\frac{1}{4} - kx) dx = 0.0625$ when $k = \frac{1}{4}$.
 
-	If $\frac{1}{2} > p \geq 0$,
+	So in conclusion, the global optimized $-\frac{w_1}{w_2} = k = \mathbf{0.35355341}$, the optimal linear classifier that passes through the origin is $\mathbf{f(x_1, x_2) = -0.35355341 x_1 + x_2 = 0}$, and the corresponding minimal true error rate $R^{true}(f) = \mathbf{0.0517766952966372}$.
 	
-	\begin{enumerate}[label=(\roman*)]
-		\item If $\frac{1}{2} > p \geq \frac{1}{4}$,  $\mathbf{P}(x_2 \geq p x_1 | y = -1) = \frac{1}{8} (\frac{1}{4p} + p - 1)$, $\mathbf{P}(x_2 \leq p x_1 | y = 1) = \frac{5p}{8} - \frac{1}{4} + \frac{1}{32p}$. $T = \frac{9p}{16} + \frac{1}{32p} - \frac{15}{64}$. So the local optimized $p' = \frac{1}{4}$ generates local minimal $T' = \frac{2}{64}$.
-		
-		\item If $\frac{1}{4} > p \geq 0$, $\mathbf{P}(x_2 \geq p x_1 | y = -1) = \frac{1}{4}[\frac{1}{2} - 
-		\frac{3p}{2}]$, $\mathbf{P}(x_2 \leq p x_1 | y = 1) = \frac{p}{8}$, $T = \frac{4p}{64} + \frac{1}{64}$. So the local optimal $p' = 0 $ generates local minimal $T' = \frac{1}{64}$.
-	\end{enumerate}
-
-	So in conclusion, the global optimized $-\frac{w_1}{w_2} = p = \mathbf{0}$, the optimal linear classifier that passes through the origin is $\mathbf{f(x_1, x_2) = x_2 = 0}$, and the corresponding minimal true error rate $R^{true}(f) = \mathbf{\frac{1}{64}}$.
+	The plot of the decision boundary on the basketball court is:
+	
+	\includegraphics[scale=0.6]{q1g.png}
 	
 	%1h
 	\item The optimal depth 2 decision tree will split on $x_1 = m$ and $x_2 = n$. And $f(\mathbf{x}) = -1$ if $m \leq x_1 \leq 1$ and $0 \leq x_2 \leq n$, $f(\mathbf{x}) = 1$ otherwise.
 	
 	\begin{equation}
-	T = R^{true}(f) = \mathbf{P}(y = 1) * \mathbf{P}(f(\mathbf{x}) \leq 0 | y = 1) + \mathbf{P}(y = -1) * \mathbf{P}(f(\mathbf{x}) \geq 0 | y = -1)
-	\end{equation}
-	\begin{equation}
-	= \frac{7}{8} * \mathbf{P}(f(\mathbf{x}) \leq 0 | y = 1) + \frac{1}{8} * \mathbf{P}(f(\mathbf{x}) \geq 0 | y = -1) \geq 0
+	T = R^{true}(f) =  \mathbf{P}(f(\mathbf{x}) \leq 0, y = 1) + \mathbf{P}(f(\mathbf{x}) \geq 0, y = -1)
 	\end{equation}
 	
-	It's easy to find out that when $\mathbf{m = \frac{1}{2}}$ and $\mathbf{n = \frac{1}{4}}$, both $\mathbf{P}(f(\mathbf{x}) \leq 0 | y = 1)$ and $\mathbf{P}(f(\mathbf{x}) \geq 0 | y = -1) $ are equal to 0, and $T$ achieves its minimal value \textbf{0}.
+	It's easy to find out that when $\mathbf{m = \frac{1}{2}}$ and $\mathbf{n = \frac{1}{4}}$, both $\mathbf{P}(f(\mathbf{x}) \leq 0, y = 1)$ and $\mathbf{P}(f(\mathbf{x}) \geq 0, y = -1) $ are equal to 0, and $T$ achieves its minimal value \textbf{0}. The depth 2 decision tree looks like:
+	
+	\includegraphics[scale=0.3]{q1h.png}
 	
 \end{enumerate}
 
