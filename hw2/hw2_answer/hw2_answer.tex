@@ -219,7 +219,7 @@
 		\begin{center}
 			\begin{tabular}{|c|c|}
 				\hline
-				$X_1$ & $0.2706$ \\ \hline
+				$X_1$ & $0.2703$ \\ \hline
 				$X_2$ & NA \\ \hline
 				$X_3$ & NA \\ \hline
 				$X_4$ & NA \\ \hline
@@ -232,8 +232,8 @@
 		\begin{center}
 			\begin{tabular}{|c|c|}
 				\hline
-				$X_1$ & $0.2706$ \\ \hline
-				$X_2$ & $0.1058$ \\ \hline
+				$X_1$ & $0.2703$ \\ \hline
+				$X_2$ & $0.1056$ \\ \hline
 				$X_3$ & NA \\ \hline
 				$X_4$ & NA \\ \hline
 				$X_5$ & NA \\ \hline
@@ -259,126 +259,97 @@
 	For all following random forests, I set the seed in Python numpy to 111.
 	
 	\begin{enumerate}[label=(\roman*)]
-		\item The table for best split variable for each $K$ is:
+		\item The table for best split variable and best surrogate variable for each $K$ is:
+		
+		(Note that when $K = 1$ there are only 999 trees in the forest, because there is one potential tree with $m = 1$ generating negative reduction in Gini index, and this tree is dropped. And whether this happens depends on the random seed set.)
 		
 		\begin{center}
-			\begin{longtable}{|c|c|c|}
+			\begin{longtable}{|c|c|c|c|}
 				\hline
-				$K$ & variable & time as best split variable (out of 1000) \\ \hline
-				\multirow{5}{1em}{1} & $X_1$ & 200 \\ 
-				& $X_2$ & 205 \\
-				& $X_3$ & 196 \\
-				& $X_4$ & 209 \\
-				& $X_5$ & 190 \\
+				$K$ & variable & time as best split variable  & time as best surrogate variable \\ \hline
+				\multirow{5}{1em}{1} & $X_1$ & 215 & 0 \\ 
+				& $X_2$ & 203 & 0\\
+				& $X_3$ & 186 & 0\\
+				& $X_4$ & 192 & 0\\
+				& $X_5$ & 203 & 0\\
 				\hline
-				\multirow{5}{1em}{2} & $X_1$ & 333 \\ 
-				& $X_2$ & 278 \\
-				& $X_3$ & 157 \\
-				& $X_4$ & 156 \\
-				& $X_5$ & 76 \\
+				\multirow{5}{1em}{2} & $X_1$ & 399 & 0\\ 
+				& $X_2$ & 312 & 106\\
+				& $X_3$ & 119 & 291\\
+				& $X_4$ & 116 & 268\\
+				& $X_5$ & 54 & 335\\
 				\hline
-				\multirow{5}{1em}{3} & $X_1$ & 509 \\ 
-				& $X_2$ & 283 \\
-				& $X_3$ & 79 \\
-				& $X_4$ & 93 \\
-				& $X_5$ & 36 \\
+				\multirow{5}{1em}{3} & $X_1$ & 585 & 0 \\ 
+				& $X_2$ & 321 & 291\\
+				& $X_3$ & 48 & 288\\
+				& $X_4$ & 39 & 146\\
+				& $X_5$ & 7 & 275\\
 				\hline
-				\multirow{5}{1em}{4} & $X_1$ & 588 \\ 
-				& $X_2$ & 280 \\
-				& $X_3$ & 56 \\
-				& $X_4$ & 53 \\
-				& $X_5$ & 23 \\
+				\multirow{5}{1em}{4} & $X_1$ & 788 & 0\\ 
+				& $X_2$ & 212 & 582\\
+				& $X_3$ & 0 & 168\\
+				& $X_4$ & 0 & 22\\
+				& $X_5$ & 0 & 228\\
 				\hline
-				\multirow{5}{1em}{5} & $X_1$ & 668 \\ 
-				& $X_2$ & 237 \\
-				& $X_3$ & 46 \\
-				& $X_4$ & 29 \\
-				& $X_5$ & 20 \\
+				\multirow{5}{1em}{5} & $X_1$ & 1000 & 0\\ 
+				& $X_2$ & 0 & 1000\\
+				& $X_3$ & 0 & 0\\
+				& $X_4$ & 0 & 0\\
+				& $X_5$ & 0 & 0\\
 				\hline
 			\end{longtable}
 		\end{center}	
-		
-		The table for best split surrogate split variable for each $K$ is:
-		
-		\begin{center}
-			\begin{longtable}{|c|c|c|}
-				\hline
-				$K$ & variable & time as best surrogate split variable (out of 1000) \\ \hline
-				\multirow{5}{1em}{1} & $X_1$ & 0 \\ 
-				& $X_2$ & 0 \\
-				& $X_3$ & 0 \\
-				& $X_4$ & 0 \\
-				& $X_5$ & 0 \\
-				\hline
-				\multirow{5}{1em}{2} & $X_1$ & 29 \\ 
-				& $X_2$ & 115 \\
-				& $X_3$ & 275 \\
-				& $X_4$ & 263 \\
-				& $X_5$ & 318 \\
-				\hline
-				\multirow{5}{1em}{3} & $X_1$ & 109 \\ 
-				& $X_2$ & 254 \\
-				& $X_3$ & 237 \\
-				& $X_4$ & 167 \\
-				& $X_5$ & 233 \\
-				\hline
-				\multirow{5}{1em}{4} & $X_1$ & 177 \\ 
-				& $X_2$ & 345 \\
-				& $X_3$ & 173 \\
-				& $X_4$ & 107 \\
-				& $X_5$ & 198 \\
-				\hline
-				\multirow{5}{1em}{5} & $X_1$ & 258 \\ 
-				& $X_2$ & 398 \\
-				& $X_3$ & 127 \\
-				& $X_4$ & 68 \\
-				& $X_5$ & 149 \\
-				\hline
-			\end{longtable}
-		\end{center}
 	
-		According to best split variable, $X_1$ is selected as the best split variable more as $K$ increases. So this suggests variable $X_1$ is more important than others.
+		First of all, we need to make clear the implication of different values of $K$. When $K$ is smaller (like 1), each variable is given more equal opportunities to become the best split variable. When $K$ is larger (like 5), the competition between variables to become the best split gets more fierce, and important variables are more likely to win out as the best split.
+	
+		So according to the frequency of best split variables, $X_1$ is selected as the best split variable more as $K$ increases. So this suggests variable $X_1$ is more important than others.
 		
-		And according to best surrogate split variable, $X_2$ is selected more as $K$ increases. So this suggests while $X_1$ is important, the importance of $X_2$ could have been masked by that of $X_1$. So we also need to consider the importance of $X_2$.
+		And according to the frequency of best surrogate split variables, $X_2$ is selected more as $K$ increases. So this suggests while $X_1$ is important, the importance of $X_2$ could have been masked by that of $X_1$. So we also need to consider the importance of $X_2$.
 		
 		\item The variable importance according to equations (5) and (6) for each $K$ is:
 		
 		\begin{longtable}{|c|c|c|c|}
 			\hline
 			$K$ & variable & variable importance (5) & variable importance (6) \\ \hline
-			\multirow{5}{1em}{1} & $X_1$ & 0.315591 & 0.365900 \\ 
-			& $X_2$ & 0.184543 & 0.230439 \\
-			& $X_3$ & 0.087096 & -0.017959 \\
-			& $X_4$ & 0.100569 & 0.009761 \\
-			& $X_5$ & 0.091519 & -0.026316 \\
+			\multirow{5}{1em}{1} & $X_1$ & 0.269419 & 0.370326 \\ 
+			& $X_2$ & 0.105597 & 0.228473 \\
+			& $X_3$ & 0.000926 & -0.024192 \\
+			& $X_4$ & 0.000908 & 0.009479 \\
+			& $X_5$ & 0.000405 & -0.033300 \\
 			\hline
-			\multirow{5}{1em}{2} & $X_1$ & 0.315598 & 0.364745 \\ 
-			& $X_2$ & 0.184487 & 0.227410 \\
-			& $X_3$ & 0.086678 & -0.010318 \\
-			& $X_4$ & 0.100980 & -0.007949 \\
-			& $X_5$ & 0.091208 & -0.022895 \\
+			\multirow{5}{1em}{2} & $X_1$ & 0.270229 & 0.364712 \\ 
+			& $X_2$ & 0.106150 & 0.225641 \\
+			& $X_3$ & 0.001206 & -0.019158 \\
+			& $X_4$ & 0.001266 & -0.018274 \\
+			& $X_5$ & 0.000684 & -0.040000 \\
 			\hline
-			\multirow{5}{1em}{3} & $X_1$ & 0.316503 & 0.367819 \\ 
-			& $X_2$ & 0.184912 & 0.228975 \\
-			& $X_3$ & 0.086697 & -0.010125 \\
-			& $X_4$ & 0.101133 & -0.008817 \\
-			& $X_5$ & 0.091880 & -0.038887 \\
+			\multirow{5}{1em}{3} & $X_1$ & 0.270640 & 0.363863 \\ 
+			& $X_2$ & 0.105558 & 0.227726 \\
+			& $X_3$ & 0.001323 & -0.021665 \\
+			& $X_4$ & 0.001396 & -0.023588 \\
+			& $X_5$ & 0.001013 & -0.034284 \\
 			\hline
-			\multirow{5}{1em}{4} & $X_1$ & 0.316615 & 0.364218 \\ 
-			& $X_2$ & 0.185013 & 0.233357 \\
-			& $X_3$ & 0.088056 & -0.013214 \\
-			& $X_4$ & 0.100946 & -0.001885 \\
-			& $X_5$ & 0.091464 & -0.031304 \\
+			\multirow{5}{1em}{4} & $X_1$ & 0.270346 & 0.364391 \\ 
+			& $X_2$ & 0.105903 & 0.230000 \\
+			& $X_3$ & NaN & NaN \\
+			& $X_4$ & NaN & NaN \\
+			& $X_5$ & NaN & NaN \\
 			\hline
-			\multirow{5}{1em}{5} & $X_1$ & 0.316620 & 0.363772 \\ 
-			& $X_2$ & 0.185098 & 0.228608 \\
-			& $X_3$ & 0.087510 & -0.013913 \\
-			& $X_4$ & 0.100940 & -0.014481 \\
-			& $X_5$ & 0.090950 & -0.037 \\
+			\multirow{5}{1em}{5} & $X_1$ & 0.270640 & 0.36388 \\ 
+			& $X_2$ & NaN & NaN \\
+			& $X_3$ & NaN & NaN \\
+			& $X_4$ & NaN & NaN \\
+			& $X_5$ & NaN & NaN \\
 			\hline
 		\end{longtable}
+	
+		As these are all average variable importance over all trees, importance of each variable user different values of $K$ should show significant difference, which is consistent with the empirical results. And if some variables are never selected as the best split variable, they won't have either variable importance (5) or (6).
 		
-		%TODO masking
+		Both variable importance (5) and (6) for all the $K = \{1, 2, 3, 4, 5\}$ suggest variable $X_1$ is the most important one, and $X_2$ is the second important one. And the importance of $X_1$ and $X_2$ are much higher that that of other variables.
+		
+		As $K$ increase, the problem of masking is exaggerated. When $K = 5$, only variable $X_1$ is selected as the best split, thus only its importance can be computed. We can never know the importance of other variables.
+		
+		But when $K$ is small, each variable is given more equal opportunities to be selected as the best split. And when a variable is selected as the best split, it is able to demonstrate its importance. So the results of $K = 1$ could lessen the impact of masking.
 		
 		\item The mean squares loss on the test data using the random forest with 2 methods:
 		
@@ -386,15 +357,15 @@
 			\begin{tabular}{|c|c|c|}
 				\hline
 				$K$ & method 1 & method 2 \\ \hline
-				1 &  & \\ \hline
-				2 &  & \\ \hline
-				3 &  & \\ \hline
-				4 &  & \\ \hline
-				5 &  & \\ \hline
+				1 & 0.17  & 0.358240 \\ \hline
+				2 & 0.15 & 0.262910 \\ \hline
+				3 & 0.1 & 0.189990 \\ \hline
+				4 & 0.1  & 0.136040 \\ \hline
+				5 & 0.1  & 0.100000	 \\ \hline
 			\end{tabular}
 		\end{center}
 		
-		%TODO which method is correct for random forest
+		Method 1 is the correct one to compute the prediction error on random forest. Because for a random forest, its estimation/prediction is computed as the majority vote of all trees (for classification) or the average prediction of all trees (for regression). So to compute prediction error, we should get the predicted label in the previous way, and then compare it with the true label to compute mean squares loss.
 	\end{enumerate}
 
 	\item 
@@ -404,75 +375,74 @@
 		\begin{longtable}{|c|c|c|c|}
 			\hline
 			$q$ & variable & variable importance (5) & variable importance (6) \\ \hline
-			\multirow{5}{1em}{0.4} & $X_1$ & 0.407452 & 0.367130 \\ 
-			& $X_2$ & 0.341932 & 0.229640 \\
-			& $X_3$ & 0.286466 & -0.015229\\
-			& $X_4$ & 0.300333 & 0.001737 \\
-			& $X_5$ & 0.290861 & -0.012727 \\
+			\multirow{5}{1em}{0.4} & $X_1$ & 0.269617 & 0.366979 \\ 
+			& $X_2$ & 0.105768 & 0.234229 \\
+			& $X_3$ & 0.003900 & -0.007961\\
+			& $X_4$ & 0.004054 & -0.000769 \\
+			& $X_5$ & 0.002572 & -0.015064 \\
 			\hline
-			\multirow{5}{1em}{0.5} & $X_1$ & 0.383744 & 0.367407 \\ 
-			& $X_2$ & 0.301408 & 0.233945 \\
-			& $X_3$ & 0.236769 & -0.012283 \\
-			& $X_4$ & 0.250323 & 0.003333 \\
-			& $X_5$ & 0.241498 & -0.016509 \\
+			\multirow{5}{1em}{0.5} & $X_1$ & 0.269642 & 0.365378 \\ 
+			& $X_2$ & 0.105405 & 0.227849 \\
+			& $X_3$ & 0.002632 & -0.005097 \\
+			& $X_4$ & 0.002545 & -0.008703 \\
+			& $X_5$ & 0.001845 & -0.015529 \\
 			\hline
-			\multirow{5}{1em}{0.6} & $X_1$ & 0.361694 & 0.367335 \\ 
-			& $X_2$ & 0.263844 & 0.226786 \\
-			& $X_3$ & 0.187090 & -0.017031 \\
-			& $X_4$ & 0.200351 & 0.002857 \\
-			& $X_5$ & 0.191520 & -0.020842 \\
+			\multirow{5}{1em}{065} & $X_1$ & 0.273054 & 0.363852 \\ 
+			& $X_2$ & 0.104674 & 0.229203 \\
+			& $X_3$ & 0.001848 & -0.013398 \\
+			& $X_4$ & 0.001544 & 0.000625 \\
+			& $X_5$ & 0.001848 & -0.025526 \\
 			\hline
-			\multirow{5}{1em}{0.7} & $X_1$ & 0.339353 & 0.365197 \\ 
-			& $X_2$ & 0.224097 & 0.224492 \\
-			& $X_3$ & 0.137176 & -0.020660 \\
-			& $X_4$ & 0.150509 & 0.003743 \\
-			& $X_5$ & 0.141717 & -0.016368\\
+			\multirow{5}{1em}{0.7} & $X_1$ & 0.269012 & 0.363795 \\ 
+			& $X_2$ & 0.105991 & 0.226984 \\
+			& $X_3$ & 0.001697 & -0.004348 \\
+			& $X_4$ & 0.001333 & -0.006955 \\
+			& $X_5$ & 0.000993 & -0.021554\\
 			\hline
-			\multirow{5}{1em}{0.8} & $X_1$ & 0.315598 & 0.364745 \\ 
-			& $X_2$ & 0.184488 & 0.227410 \\
-			& $X_3$ & 0.086678 & -0.010318 \\
-			& $X_4$ & 0.100980 & -0.007947 \\
-			& $X_5$ & 0.091208 & -0.022893 \\
+			\multirow{5}{1em}{0.8} & $X_1$ & 0.270229 & 0.364712 \\ 
+			& $X_2$ & 0.106150 & 0.225641 \\
+			& $X_3$ & 0.001206 & -0.019158 \\
+			& $X_4$ & 0.001266 & -0.018274 \\
+			& $X_5$ & 0.000684 & -0.04000 \\
 			\hline
 		\end{longtable}
-		
-		%TODO 
-		From the results, 
+
+		From the results, both equations (5) and (6) suggest variable $X_1$ is the most important one, and $X_2$ is the second important one. And the importance of $X_1$ and $X_2$ are much higher that that of other variables.
 		
 		\item The standard deviation of variable importance according to equations (5) and (6) for each $q$ is:
 		
 		\begin{longtable}{|c|c|c|c|}
 			\hline
 			$q$ & variable & std (5) & std (6) \\ \hline
-			\multirow{5}{1em}{0.4} & $X_1$ & 0.01112367 & 0.03103856 \\ 
-			& $X_2$ & 0.00870762 & 0.03255196 \\
-			& $X_3$ & 0.00952271 & 0.03317124 \\
-			& $X_4$ & 0.00323389 & 0.04077185 \\
-			& $X_5$ & 0.00681136 & 0.0327284 \\
+			\multirow{5}{1em}{0.4} & $X_1$ & 0.027299 & 0.031448 \\ 
+			& $X_2$ & 0.022169 & 0.034970 \\
+			& $X_3$ & 0.003543 & 0.033055 \\
+			& $X_4$ & 0.003339 & 0.038799 \\
+			& $X_5$ & 0.002730 & 0.033652 \\
 			\hline
-			\multirow{5}{1em}{0.5} & $X_1$ & 0.01124836 & 0.03793574 \\ 
-			& $X_2$ & 0.00902561 & 0.03685835 \\
-			& $X_3$ & 0.00797128 & 0.03568958 \\
-			& $X_4$ & 0.0028276 & 0.04255715 \\
-			& $X_5$ & 0.00608335 & 0.04003311 \\
+			\multirow{5}{1em}{0.5} & $X_1$ & 0.021400 & 0.037146 \\ 
+			& $X_2$ & 0.017976 & 0.039988 \\
+			& $X_3$ & 0.002717 & 0.037081 \\
+			& $X_4$ & 0.002402 & 0.036587 \\
+			& $X_5$ & 0.001781 & 0.036883 \\
 			\hline
-			\multirow{5}{1em}{0.6} & $X_1$ & 0.01055884 & 0.04240423 \\ 
-			& $X_2$ & 0.00876408 & 0.04514072 \\
-			& $X_3$ & 0.00609878 & 0.04217448 \\
-			& $X_4$ & 0.00215396 & 0.0493615 \\
-			& $X_5$ & 0.00455622 & 0.03715297 \\
+			\multirow{5}{1em}{0.6} & $X_1$ & 0.017279 & 0.041339 \\ 
+			& $X_2$ & 0.015590 & 0.044078 \\
+			& $X_3$ & 0.001722 & 0.048822 \\
+			& $X_4$ & 0.001376 & 0.048858 \\
+			& $X_5$ & 0.002246 & 0.042717 \\
 			\hline
-			\multirow{5}{1em}{0.7} & $X_1$ & 0.01003214 & 0.04752654 \\ 
-			& $X_2$ & 0.00857417 & 0.04998027 \\
-			& $X_3$ & 0.00480541 & 0.04686512 \\
-			& $X_4$ & 0.00181428 & 0.05767446 \\
-			& $X_5$ & 0.00400655 & 0.04974323 \\
+			\multirow{5}{1em}{0.7} & $X_1$ & 0.014476 & 0.046987 \\ 
+			& $X_2$ & 0.012524 & 0.047612 \\
+			& $X_3$ & 0.001305 & 0.045928 \\
+			& $X_4$ & 0.001538 & 0.050301 \\
+			& $X_5$ & 0.000838 & 0.049596 \\
 			\hline
-			\multirow{5}{1em}{0.8} & $X_1$ & 0.00833034 & 0.06041158 \\ 
-			& $X_2$ & 0.00750252 & 0.0628672 \\
-			& $X_3$ & 0.00366868 & 0.06426875 \\
-			& $X_4$ & 0.00133906 & 0.06270319 \\
-			& $X_5$ & 0.00315306 & 0.05855308 \\
+			\multirow{5}{1em}{0.8} & $X_1$ & 0.010818 & 0.056496 \\ 
+			& $X_2$ & 0.009347 & 0.061802 \\
+			& $X_3$ & 0.000963 & 0.058462 \\
+			& $X_4$ & 0.000908 & 0.065893 \\
+			& $X_5$ & 0.000813 & 0.064061 \\
 			\hline
 		\end{longtable}
 	\end{enumerate}
