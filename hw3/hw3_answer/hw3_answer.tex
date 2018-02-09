@@ -1,0 +1,125 @@
+\documentclass[paper=letter, fontsize=12pt]{article}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{graphicx}
+\graphicspath{{images/}}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{multirow}
+\usepackage{longtable}
+
+%opening
+\title{Compsci 571 HW3}
+\author{Yilin Gao (yg95)}
+
+\begin{document}
+
+\maketitle
+\section{Separability}
+
+\textit{Proof:}
+
+To show that two convex hulls do not intersect, we could show any point in one convex hull is not in the other convex hull, or equivalently, any point in one convex hull is not the same as any point in the other convext hull.
+
+Suppose $\mathbf{x}_i = \sum_{n} \alpha_{ni} \mathbf{x}_{n}$ is a point in the convex hull of $\{\mathbf{x}_n\}$, with $\alpha_{ni} \geq 0$ for $\forall i$ and $\sum_{n} \alpha_{ni} = 1$, and $\mathbf{x}_j = \sum_{m} \alpha_{mj} \mathbf{x'}_{m}$ is a point in the convex hull of $\{\mathbf{x'}_m\}$, with $\alpha_{mj} \geq 0$ for $\forall j$ and $\sum_{m} \alpha_{mj} = 1$. We need to prove $\mathbf{x}_i \neq \mathbf{x'}_j$ for $\forall i$ and $\forall j$.
+
+We prove with contradiction. Assume for a given $i$, there exists some $j$ such that $\mathbf{x}_i = \mathbf{x'}_j$. Then $\mathbf{w}^T \mathbf{x}_i= \mathbf{w}^T \mathbf{x'}_j$, and $\mathbf{w}^T \mathbf{x}_i - \mathbf{w}^T \mathbf{x'}_j = 0$.
+
+$$\mathbf{w}^T \mathbf{x}_i - \mathbf{w}^T \mathbf{x'}_j = \mathbf{w}^T(\sum_{n} \alpha_{ni} \mathbf{x}_n) - \mathbf{w}^T(\sum_{m} \alpha_{mj} \mathbf{x'}_m) = \sum_{n} \alpha_{ni} (\mathbf{w}^T \mathbf{x}_n) - \sum_{m} \alpha_{mj} (\mathbf{w}^T \mathbf{x'}_m)$$
+
+$$= [\sum_{n} \alpha_{ni} (\mathbf{w}^T \mathbf{x}_n) + w_0] - [\sum_{m} \alpha_{mj} (\mathbf{w}^T \mathbf{x'}_m) + w_0]$$
+
+Because $\sum_{n} \alpha_{ni} = 1$ and $\sum_{m} \alpha_{mj} = 1$:
+
+$$= [\sum_{n} \alpha_{ni} (\mathbf{w}^T \mathbf{x}_n) + \sum_{n} \alpha_{ni} w_0] - [\sum_{m} \alpha_{mj} (\mathbf{w}^T \mathbf{x'}_m) + \sum_{m} \alpha_{mj} w_0]$$
+
+$$= \sum_{n} \alpha_{ni} (\mathbf{w}^T \mathbf{x}_n + w_0) - \sum_{m} \alpha_{mj} (\mathbf{w}^T \mathbf{x'}_m + w_0)$$
+
+If the two sets of points $\{\mathbf{x}_i \}$ and $\{\mathbf{x'}_j \}$are linearly seprable, $\mathbf{w}^T \mathbf{x}_n + w_0 > 0$ for $\forall n$, and $\mathbf{w}^T \mathbf{x'}_m + w_0 < 0$ for $\forall m$. And because $\alpha_{ni} \geq 0$ for $\forall ni$ and $\alpha_{mj} \geq 0$ for $\forall mj$, the above equation is a sum of $n$ positive numbers minus a sum of $m$ negative numbers, which is a positive number.
+
+So $\mathbf{w}^T \mathbf{x}_i$ cannot be equal to $\mathbf{w}^T \mathbf{x'}_j$. Contradiction.
+
+So for a given $i$, there is no $j$ such that $\mathbf{x}_i = \mathbf{x'}_j$. So the two convex hulls do not intersect. $\ \ \ \ \square$
+
+\section{Logistic Regression and Gradient Descent}
+
+\begin{enumerate}[label=(\alph*)]
+
+	%2a
+	\item 
+	
+	\textit{Proof:}
+	
+	$$\sigma'(a) = - \frac{1}{(1 + e^{-a})^2} (-e^{-a}) = \frac{e^{-a}}{(1 + e^{-a})^2}$$
+	
+	$$\sigma(a)(1 - \sigma(a)) = \frac{1}{1 + e^{-a}} (1 - \frac{1}{1 + e^{-a}}) = \frac{1}{1 + e^{-a}} \frac{e^{-a}}{1 + e^{-a}} = \frac{e^{-a}}{(1 + e^{-a})^2}$$
+	
+	$$\therefore \sigma'(a) = \sigma(a)(1 - \sigma(a)) \ \ \ \ \square$$
+	
+	%2b
+	\item 
+	
+	$$\frac{\partial L_{\mathbf{w}}}{\partial w_j} = \frac{\partial }{\partial w_j} \sum_{i = 1}^{n}\{-y^{(i)} \log[\sigma(\mathbf{w}^T \mathbf{x}^{(i)})] - (1 - y^{(i)}) \log[1 - \sigma(\mathbf{w}^T \mathbf{x}^{(i)})] \} $$
+	
+	$$= \sum_{i = 1}^{n} \{-y^{(i)} \frac{\sigma'(\mathbf{w}^T \mathbf{x}^{(i)})}{\sigma(\mathbf{w}^T \mathbf{x}^{(i)})} x^{(i)}_j - (1 - y^{(i)}) \frac{-\sigma'(\mathbf{w}^T \mathbf{x}^{(i)})}{1 - \sigma(\mathbf{w}^T \mathbf{x}^{(i)}) } x^{(i)}_j \}$$
+	
+	Because $\sigma'(\mathbf{w}^T \mathbf{x}) = \sigma(\mathbf{w}^T \mathbf{x}) (1 - \sigma(\mathbf{w}^T \mathbf{x}) )$,
+	
+	$$= \sum_{i = 1}^{n} \{-y^{(i)} (1 - \sigma(\mathbf{w}^T \mathbf{x}^{(i)})) x^{(i)}_j + (1 - y^{(i)}) \sigma(\mathbf{w}^T \mathbf{x}^{(i)}) x^{(i)}_j \}$$
+	
+	$$= \sum_{i = 1}^{n} \{ x^{(i)}_j (\sigma(\mathbf{w}^T \mathbf{x}^{(i)}) - y^{(i)}) \}$$
+	
+	%2c
+	\item To prove $L_{\mathbf{w}}$ is convex in $\mathbf{w}$, we need to prove that for any $\mathbf{w}_1$ and $\mathbf{w}_2$ and $\theta \in [0, 1]$, $L(\theta \mathbf{w}_1 + (1- \theta) \mathbf{w}_2) \leq \theta L(\mathbf{w}_1) + (1 - \theta) L(\mathbf{w}_2)$.
+	
+	Use $\mathbf{w}^*$ to represent $\theta \mathbf{w}_1 + (1- \theta) \mathbf{w}_2$.
+	
+	$$LHS = L(\mathbf{w}^*) = \sum_{i = 1}^{n} \{ -y^{(i)} \log[\sigma(\mathbf{w}^{*T} \mathbf{x})] - (1 - y^{(i)}) \log[1 - \sigma(\mathbf{w}^{*T} \mathbf{x})] \}$$
+	
+	$$\sigma(\mathbf{w}^{*T} \mathbf{x}) = \frac{1}{1 + e^{-\mathbf{w}^{*T} \mathbf{x}}} = \frac{1}{1 + e^{-\theta \mathbf{w}_1^T \mathbf{x}} * e^{-(1- \theta) \mathbf{w}_2^T \mathbf{x}}} \triangleq \frac{1}{A}$$
+	
+	$$LHS = \sum_{i = 1}^{n} \{ y^{(i)} \log{A} - (1 - y^{(i)}) (\log{(1 - A)} - \log{A}) \}$$
+	
+	$$= \sum_{i = 1}^{n} \{ y^{(i)} \log{A} + (1 - y^{(i)}) (\mathbf{w}^{*T} \mathbf{x} + \log{A}) \}$$
+	
+	$$= \sum_{i = 1}^{n} \{ (1 - y^{(i)})\mathbf{w}^{*T} \mathbf{x} + \log{A}) \}$$
+	
+	$$RHS = \theta L(\mathbf{w}_1) + (1 - \theta) L(\mathbf{w}_2)$$
+	
+	$$= \theta \sum_{i = 1}^{n} \{ -y^{(i)} \log[\sigma(\mathbf{w}^{T}_1 \mathbf{x})] - (1 - y^{(i)}) \log[1 - \sigma(\mathbf{w}^{T}_1 \mathbf{x})] \} + (1 - \theta) \sum_{i = 1}^{n} \{ -y^{(i)} \log[\sigma(\mathbf{w}^{T}_2 \mathbf{x})] - (1 - y^{(i)}) \log[1 - \sigma(\mathbf{w}^{T}_2 \mathbf{x})] \} $$
+	
+	$$=  \sum_{i = 1}^{n} \{ -y^{(i)} [\theta \log[\sigma(\mathbf{w}^{T}_1 \mathbf{x})] + (1 - \theta)  \log[\sigma(\mathbf{w}^{T}_2 \mathbf{x})]] - (1 - y^{(i)}) [\theta \log[1- \sigma(\mathbf{w}^{T}_1 \mathbf{x})] + (1 - \theta)  \log[1- \sigma(\mathbf{w}^{T}_2 \mathbf{x})]] \}$$
+	
+	Define $B \triangleq (1 + e^{-\mathbf{w}^T_1 \mathbf{x}}) ^ \theta (1 + e^{-\mathbf{w}^T_2 \mathbf{x}}) ^ {1 - \theta}$,
+	
+	$$= \sum_{i = 1}^{n} \{ y^{(i)} \log B + (1- y^{(i)}) (\mathbf{w}^{*T} \mathbf{x} + \log B) \} $$
+	
+	$$= \sum_{i = 1}^{n} \{ (1 - y^{(i)})\mathbf{w}^{*T} \mathbf{x} + \log{B}) \}$$
+	
+	So $RHS - LHS = n(\log{B} - \log{A} )$, 
+	
+	$$\log{B} - \log{A} = \log{\frac{(1 + e^{-\mathbf{w}^T_1 \mathbf{x}}) ^ \theta (1 + e^{-\mathbf{w}^T_2 \mathbf{x}}) ^ {1 - \theta}}{1 + e^{-\theta \mathbf{w}_1^T \mathbf{x}} * e^{-(1- \theta) \mathbf{w}_2^T \mathbf{x}}}}$$
+	
+	Because for $\theta \in [0, 1]$, $(1 + x_1)^\theta (1 + x_2) ^ {1 - \theta} \geq 1 + x_1^{\theta} x_2^{1 - \theta}$, so $(1 + e^{-\mathbf{w}^T_1 \mathbf{x}}) ^ \theta (1 + e^{-\mathbf{w}^T_2 \mathbf{x}}) ^ {1 - \theta} \geq 1 + e^{-\theta \mathbf{w}_1^T \mathbf{x}} * e^{-(1- \theta) \mathbf{w}_2^T \mathbf{x}}$, $RHS - LHS = n(\log{B} - \log{A}) \geq 0$.
+	
+	So for any $\mathbf{w}_1$ and $\mathbf{w}_2$ and $\theta \in [0, 1]$, $L(\theta \mathbf{w}_1 + (1- \theta) \mathbf{w}_2) \leq \theta L(\mathbf{w}_1) + (1 - \theta) L(\mathbf{w}_2)$. $L_{\mathbf{w}}$ is convex in $\mathbf{w}$. $\ \ \ \ \square$
+	
+	%2d
+	\item
+	
+\end{enumerate}
+
+\section{Boosting}
+
+\begin{enumerate}[label=(\alph*)]
+	
+	%3a
+	\item 
+	
+	%3b
+	\item 
+	
+	%3c
+	\item
+\end{enumerate}
+\end{document}
