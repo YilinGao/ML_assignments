@@ -74,15 +74,19 @@ So for a given $i$, there is no $j$ such that $\mathbf{x}_i = \mathbf{x'}_j$. So
 	
 	Use $\mathbf{w}^*$ to represent $\theta \mathbf{w}_1 + (1- \theta) \mathbf{w}_2$.
 	
+	For the left-hand side:
+	
 	$$LHS = L(\mathbf{w}^*) = \sum_{i = 1}^{n} \{ -y^{(i)} \log[\sigma(\mathbf{w}^{*T} \mathbf{x})] - (1 - y^{(i)}) \log[1 - \sigma(\mathbf{w}^{*T} \mathbf{x})] \}$$
 	
-	$$\sigma(\mathbf{w}^{*T} \mathbf{x}) = \frac{1}{1 + e^{-\mathbf{w}^{*T} \mathbf{x}}} = \frac{1}{1 + e^{-\theta \mathbf{w}_1^T \mathbf{x}} * e^{-(1- \theta) \mathbf{w}_2^T \mathbf{x}}} \triangleq \frac{1}{A}$$
+	Because $\sigma(\mathbf{w}^{*T} \mathbf{x}) = \frac{1}{1 + e^{-\mathbf{w}^{*T} \mathbf{x}}} = \frac{1}{1 + e^{-\theta \mathbf{w}_1^T \mathbf{x}} * e^{-(1- \theta) \mathbf{w}_2^T \mathbf{x}}}$, define $A \triangleq 1 + e^{-\theta \mathbf{w}_1^T \mathbf{x}} * e^{-(1- \theta) \mathbf{w}_2^T \mathbf{x}}$,
 	
-	$$LHS = \sum_{i = 1}^{n} \{ y^{(i)} \log{A} - (1 - y^{(i)}) (\log{(1 - A)} - \log{A}) \}$$
+	$$= \sum_{i = 1}^{n} \{ y^{(i)} \log{A} - (1 - y^{(i)}) (\log{(1 - A)} - \log{A}) \}$$
 	
 	$$= \sum_{i = 1}^{n} \{ y^{(i)} \log{A} + (1 - y^{(i)}) (\mathbf{w}^{*T} \mathbf{x} + \log{A}) \}$$
 	
 	$$= \sum_{i = 1}^{n} \{ (1 - y^{(i)})\mathbf{w}^{*T} \mathbf{x} + \log{A}) \}$$
+	
+	For the right hand side:
 	
 	$$RHS = \theta L(\mathbf{w}_1) + (1 - \theta) L(\mathbf{w}_2)$$
 	
