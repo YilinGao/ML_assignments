@@ -5,8 +5,11 @@
 \graphicspath{{images/}}
 \usepackage{amssymb}
 \usepackage{enumitem}
-\usepackage{multirow}
-\usepackage{longtable}
+\usepackage{amsmath}
+\usepackage{algorithm2e}
+
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\argmax}{argmax}
 
 %opening
 \title{Compsci 571 HW3}
@@ -70,7 +73,9 @@ So for a given $i$, there is no $j$ such that $\mathbf{x}_i = \mathbf{x'}_j$. So
 	$$= \sum_{i = 1}^{n} \{ x^{(i)}_j (\sigma(\mathbf{w}^T \mathbf{x}^{(i)}) - y^{(i)}) \}$$
 	
 	%2c
-	\item To prove $L_{\mathbf{w}}$ is convex in $\mathbf{w}$, we need to prove that for any $\mathbf{w}_1$ and $\mathbf{w}_2$ and $\theta \in [0, 1]$, $L(\theta \mathbf{w}_1 + (1- \theta) \mathbf{w}_2) \leq \theta L(\mathbf{w}_1) + (1 - \theta) L(\mathbf{w}_2)$.
+	\item \textit{Proof:}
+	
+	To prove $L_{\mathbf{w}}$ is convex in $\mathbf{w}$, we need to prove that for any $\mathbf{w}_1$ and $\mathbf{w}_2$ and $\theta \in [0, 1]$, $L(\theta \mathbf{w}_1 + (1- \theta) \mathbf{w}_2) \leq \theta L(\mathbf{w}_1) + (1 - \theta) L(\mathbf{w}_2)$.
 	
 	Use $\mathbf{w}^*$ to represent $\theta \mathbf{w}_1 + (1- \theta) \mathbf{w}_2$.
 	
@@ -109,7 +114,7 @@ So for a given $i$, there is no $j$ such that $\mathbf{x}_i = \mathbf{x'}_j$. So
 	So for any $\mathbf{w}_1$ and $\mathbf{w}_2$ and $\theta \in [0, 1]$, $L(\theta \mathbf{w}_1 + (1- \theta) \mathbf{w}_2) \leq \theta L(\mathbf{w}_1) + (1 - \theta) L(\mathbf{w}_2)$. $L_{\mathbf{w}}$ is convex in $\mathbf{w}$. $\ \ \ \ \square$
 	
 	%2d
-	\item
+	\item See the Jupyter notebook.
 	
 \end{enumerate}
 
@@ -118,12 +123,73 @@ So for a given $i$, there is no $j$ such that $\mathbf{x}_i = \mathbf{x'}_j$. So
 \begin{enumerate}[label=(\alph*)]
 	
 	%3a
-	\item 
+	\item From the class notes on Boosting, we have proved that if the weak learning assumption holds, at $t$th step, AdaBoost's training misclassification error is $\geq 0$ and $ \leq e^{-2 \gamma^2_{WLA}T}$. According to the weak learning assumption, $\gamma_{WLA} > 0$, so $-2 \gamma^2_{WLA} < 0$. So when $T \rightarrow \infty$, $-2 \gamma^2_{WLA} T \rightarrow -\infty$, and $e^{-2 \gamma^2_{WLA}T} \rightarrow 0$. When the lower bound is 0, and the upper bound approaches 0, AdaBoost's training error also approaches 0. $\ \ \ \ \square$
 	
 	%3b
-	\item 
+	\item Use the boosting statistical view to derive the algorithm for weighted AdaBoost.
+	
+	Define the AdaBoost output model as $f(\mathbf{x}) = \sum_{j = 1}^{p} \lambda_{T, j} h_j(\mathbf{x})$, which is a linear combination of $p$ weak classifiers. The training misclassification error is $R^{train}(\mathbf{\lambda}) = \sum_{i = 1}^{n} w_i e^{-(\mathbf{M} \mathbf{\lambda})_i}$. Assign $\mathbf{\lambda}_1 = \mathbf{0}$ at the beginning, which means every training point is misclassified at the beginning.
+	
+	Do the following in each $t$th ($t \in [1, T]$) step:
+	
+	First, use coordinate descent to find the direction $j_t$ with largest reduction in $R^{train}(\mathbf{\lambda})$:
+	
+	$$j_t \in \argmax_j [- \frac{\partial R^{train}(\mathbf{\lambda}_t + \alpha \mathbf{e}_j)}{\partial \alpha} |_{\alpha = 0}]$$
+	
+	$$= \argmax_j [- \frac{\partial}{\partial \alpha} [\sum_{i = 1}^{n} w_i e^{-(\mathbf{M}(\mathbf{\lambda}_t + \alpha \mathbf{e}_j))_i}] |_{\alpha = 0}]$$
+	
+	$$= \argmax_j [\sum_{i = 1}^{n} M_{ij} w_i e^{-(\mathbf{M} \mathbf{\lambda}_t)_i}]$$
+	
+	Define a discrete probability distribution as $d^*_{t, i} = w_i e^{-(\mathbf{M} \mathbf{\lambda}_t)_i} / Z_t$, where $Z_t = \sum_{i = 1}^{n} w_i e^{-(\mathbf{M} \mathbf{\lambda}_t)_i}$ so that $\sum_{i = 1}^{n} d^*_{t, i} = 1$. 
+	
+	So $$j_t \in \argmax_j [\sum_{i \in M_{ij} = 1} d^*_{t, i} - \sum_{i \in M_{ij} = -1} d^*_{t, i}] $$
+	
+	$$= \argmax_j[1 - \sum_{i \in M_{ij} = -1} d^*_{t, i} - \sum_{i \in M_{ij} = -1} d^*_{t, i}]$$
+	
+	$$= \argmin_j [\sum_{i \in M_{ij} = -1} d^*_{t, i}]$$
+	
+	Define $\sum_{i \in M_{ij} = -1} d^*_{t, i}$ as $d^*_{-}$, and $\sum_{i \in M_{ij} = 1} d^*_{t, i}$ as $d^*_{+}$. We have $d^*_{+} + d^*_{-} = 1$.
+	
+	After get $j_t$, $\mathbf{\lambda}_{t+1} = \mathbf{\lambda}_t + \alpha \mathbf{e}_{jt}$.
+	
+	Second, take an $\alpha_t$ long step at the coordinate $j_t$ to reach the minimal value of $R^{train}(\mathbf{\lambda}_t + \alpha \mathbf{e}_{j_t})$:
+	
+	$$0 = \frac{\partial R^{train}(\mathbf{\lambda}_t + \alpha \mathbf{e}_{j_t})}{\partial \alpha} |_{\alpha_t}$$
+	
+	$$= \sum_{i = 1}^{n} M_{ij} w_i e^{-(\mathbf{M} \mathbf{\lambda}_t)_i - \alpha_t M_{i j_t}}$$
+	
+	$$= e^{-\alpha_t} \sum_{i \in M_{ij} = 1} w_i e^{-(\mathbf{M} \mathbf{\lambda}_t)_i} - e^{\alpha_t} \sum_{i \in M_{ij} = -1} w_i e^{-(\mathbf{M} \mathbf{\lambda}_t)_i}$$
+	
+	$$= e^{-\alpha_t} \sum_{i \in M_{ij} = 1} w_i e^{-(\mathbf{M} \mathbf{\lambda}_t)_i} / Z_t - e^{\alpha_t} \sum_{i \in M_{ij} = -1} w_i e^{-(\mathbf{M} \mathbf{\lambda}_t)_i} / Z_t$$
+	
+	$$= e^{-\alpha_t} \sum_{i \in M_{ij} = 1} d^*_{t, i} - e^{\alpha_t} \sum_{i \in M_{ij} = -1} d^*$$
+	
+	$$= e^{-\alpha_t} d^*_{+}  - e^{\alpha_t} d^*_{-}$$
+	
+	This leads to $$\alpha_t = \frac{1}{2} \ln(\frac{1 - d^*_{-}}{d^*_{-}})$$
+	
+	And we could know in the next round $d^*_{t+1, i} = w_i e^{-(\mathbf{M} \mathbf{\lambda}_{t+1})_i} / Z_{t+1}$, where $Z_{t+1} = \sum_{i = 1}^{n} w_i e^{-(\mathbf{M} \mathbf{\lambda}_{t+1})_i}$. So
+	$d^*_{t+1, i} = w_i e^{-(\mathbf{M} (\mathbf{\lambda}_t + \alpha \mathbf{e}_{jt})_i)} / Z_{t+1} = w_i e^{(-\mathbf{M} \mathbf{\lambda}_t)_i} e^{-\alpha_t M_{ij_t}} / Z_{t+1} = d^*_{t, i} e^{-\alpha_t M_{ij_t}} \frac{Z_t}{Z_{t+1}} \propto d^*_{t, i} e^{-\alpha_t M_{ij_t}} = d^*_{t, i} e^{-\alpha_t y_i h_{j_t}(\mathbf{x}_i)}$. And we could always adjust the normalization factor to make $\sum_{i = 1}^{n} d^*_{t+1, i} = 1$.
+	
+	And for the final output $f(x)$, because $\mathbf{\lambda}_{T, j} = \sum_{t = 1}^{T} \alpha_t \mathbf{1}_{[j_t = j]}$, we could have $f(\mathbf{x}) = \sum_{j = 1}^{p} \mathbf{\lambda}_{T, j} h_j(\mathbf{x}) =  \sum_{j = 1}^{p}  \sum_{t = 1}^{T} \alpha_t \mathbf{1}_{[j_t = j]} h_j(\mathbf{x}) = \sum_{t = 1}^{T} \alpha_t \sum_{j = 1}^{p} h_j(\mathbf{x}) \mathbf{1}_{[j_t = j]} = \sum_{t = 1}^{T} \alpha_t h_{j_t}(\mathbf{x})$.
+	
+	So the chosen $j_t$ in each step can also be expressed as $\argmin_j [\sum_{i = 1}^{n} d^*_{t, i} \mathbf{1}_{[y_i \neq f(\mathbf{x}_i)]}] = \argmin_j [\sum_{i = 1}^{n} d^*_{t, i} \mathbf{1}_{[y_i \neq h_j(\mathbf{x}_i)]}] $.
+	
+	So the weighted AdaBoost algorithm is:
+	
+	\begin{algorithm}[H]
+		\KwData{training data $\{(\mathbf{x}_i, y_i)_{i=1}^n\}$, number of iterations $T$, some weak classifiers $h_j(\mathbf{x})_{j = 1}^{p}$ }
+		Initialize $d^*_{1, i} = w_i$ for $i = 1 \dots n$ (\textbf{actually this is the only difference from the normal AdaBoost algorithm})\;
+		\For{$t = 1 \dots T$}{
+			$j_t = argmin_j [\sum_{i = 1}^{n} d^*_{t, i} \mathbf{1}_{[y_i \neq h_j(\mathbf{x}_i)]}] $ \;
+			$d^*_{-} = \sum_{i = 1}^{n} d^*_{t, i} \mathbf{1}_{[y_i \neq h_{j_t}(\mathbf{x}_i)]} $ \;
+			$\alpha_t = \frac{1}{2} \ln(\frac{1 - d^*_{-}}{d^*_{-}})$ \;
+			$d^*_{t+1, i} = d^*_{t,i} e^{-\alpha_t y_i h_{j_t}(\mathbf{x}_i)} / Z_{t+1}$ such that $\sum_{i = 1}^{n} d^*_{t+1, i} = 1$ \;
+		}
+		\KwResult{$H(\mathbf{x}) = sign(\sum_{t= 1}^{T} \alpha_t h_{j_t}(\mathbf{x}))$}
+	\end{algorithm}
 	
 	%3c
-	\item
+	\item See the Jupyter notebook.
 \end{enumerate}
 \end{document}
