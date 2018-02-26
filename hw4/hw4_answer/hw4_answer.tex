@@ -6,10 +6,6 @@
 \usepackage{amssymb}
 \usepackage{enumitem}
 \usepackage{amsmath}
-\usepackage{algorithm2e}
-
-\DeclareMathOperator*{\argmin}{argmin}
-\DeclareMathOperator*{\argmax}{argmax}
 
 %opening
 \title{Compsci 571 HW4}
@@ -104,13 +100,31 @@
 \section{SVM Implementation}
 \begin{enumerate}[label=(\alph*)]
 	%4a
-	\item See ``smv\_classifier.py''.
+	\item See \texttt{smv\_classifier.py}.
 	
 	%4b
-	\item 
+	\item \textbf{Note: for questions (b) and (c), I use \texttt{sklearn.mode\_selection.train\_test\_split} to split the training and testing set with 2018 as the random seed. And I've noticed if I use \texttt{numpy} to generate indices with 2018 as the random seed and then split, the split is different.} Code for these 2 questions are in \texttt{q4.ipynb}.
+	
+	The accuracy of the classifier on testing data is 0.8636363636363636. The ROC curve is like following:
+	
+	\includegraphics[scale=0.6]{q4b.png}
+	
+	The AUC on testing data is 0.8316400580551523.
 	
 	%4c
-	\item
+	\item For $\sigma^2 = 25$, the accuracy of the classifier on testing data is 0.8484848484848485. The ROC curve is like:
+	
+	\includegraphics[scale=0.6]{q4c1.png}
+	
+	The AUC on testing data is 0.8388969521044993.
+	
+	For $\sigma^2 = 5$, the accuracy for the classifier on testing data is 0.7954545454545454. The ROC curve is like:
+	
+	\includegraphics[scale=0.6]{q4c2.png}
+
+	The AUC on testing data is 0.7790275761973875.
+	
+	The comparison between 2 $\sigma^2$ values suggests that for Gaussian kernel if we set $\sigma^2$ too small we may overfit.
 \end{enumerate}
 
 \end{document}
