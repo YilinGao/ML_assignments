@@ -6,6 +6,7 @@
 \usepackage{amssymb}
 \usepackage{enumitem}
 \usepackage{amsmath}
+\usepackage{mathrsfs}
 
 %opening
 \title{Compsci 571 HW4}
@@ -15,8 +16,57 @@
 
 \maketitle
 \section{Constructing Kernels}
+Let $K_1$ be kernels over $\mathbb{R}^n\times\mathbb{R}^n$, let $a \in \mathbb{R}$, $<a,b>$ denotes the dot product, $a^Tb$. .
+
+\begin{enumerate}[label=(\alph*)]
+	% 1a
+	\item $K(x,z)=aK_1(x,z)$
+	
+	This is not a kernel. Because $K_1$ is a valid kernel, $K_1(x, z) \geq 0$. When $a < 0$, $K(x,z)=aK_1(x,z) \leq 0$. Because inner products $<\cdot, \cdot> \geq 0$, there won't be an inner product such that $K(x, z) = <\Phi(x), \Phi(z)>_{H_k}$.
+	
+	% 1b
+	\item $K(x,z)=<x,z>^3+(<x,z>-1)^2$
+	
+	This is not a valid kernel. 
+	
+	From lecture notes we've proved $<x,z>^3$ can be expressed as inner product in a new vector space, thus a valid kernel. 
+	
+	For $(<x,z>-1)^2$:
+	
+	$(<x,z>-1)^2 = (x^T z - 1)^2 = (\sum_{i = 1}^{n} x^{(i)} z^{(i)} - 1) (\sum_{j = 1}^{n} x^{(j)} z^{(j)} - 1) = \sum_{i = 1}^{n}\sum_{j = 1}^{n} x^{(i)} x^{(j)} z^{(i)} z^{(j)} - 2 \sum_{i = 1}^{n}x^{(i)} z^{(i)} + 1 = \sum_{i = 1}^{n}\sum_{j = 1}^{n} x^{(i)} x^{(j)} z^{(i)} z^{(j)} -  \sum_{i = 1}^{n} (\sqrt{2}x^{(i)})  (\sqrt{2} z^{(i)}) + 1$
+	
+	This equation cannot be expressed as an inner product of some $\Phi(x)$ and $\Phi(z)$. So $(<x,z>-1)^2$ is not a valid kernel.
+	
+	From lecture notes we know that when $k(x, z) = k_1(x, z) + k_2(x, z)$, only if both $k_1(x, z)$ and $k_2(x, z)$ are valid kernels, will $k(x, z)$ be a valid kernel. So in this case $K(x, z)$ is not a kernel.
+	
+	% 1c
+	\item $K(x,z)=<x,z>^2+\exp(-\|x\|^2)\exp(-\|z\|^2)$
+	
+	This is a valid kernel.
+	
+	From lecture notes we've proved $<x,z>^2$ can be expressed as inner product in a new vector space, thus a valid kernel. 
+	
+	From lecture notes we've proved $k(x, z) = g(x)g(z)$, $g: \mathbb{R}^n \rightarrow \mathbb{R}$ is a valid kernel, so $\exp(-\|x\|^2)\exp(-\|z\|^2)$, in the same form, is a valid kernel.
+	
+	So $K(x,z)=<x,z>^2+\exp(-\|x\|^2)\exp(-\|z\|^2)$, a sum of two valid kernels, is  a valid kernel.
+	 
+\end{enumerate}
 
 \section{Reproducing Kernel Hilbert Spaces}
+
+For $\mathscr{F}$ to be the RKHS for kernel $K(x,y)=xy$, it should satisfy:
+
+\begin{enumerate}
+	\item $K(x,y)$ spans $\mathscr{F}$, i.e., $\mathscr{F} = span\{ K(\cdot, x), x \in [0, 1] \} = \{f: f(\cdot) = \sum_{i = 1}^{m} \alpha_i K(\cdot, x_i), \}$
+	
+	\item $K(x, y)$ has the reproducing kernel property: $f(x) = <f(\cdot), K(\cdot, x)>_{\mathscr{F}_K}$
+\end{enumerate}
+
+ If $\mathscr{F}$ satisfies condition 1, for any function $f(x) = ax$ in $\mathscr{F}$, $f(x) = \sum_{i = 1}^m \alpha_i K(x, x_i)  = \sum_{i = 1}^m \alpha_i x x_i = (\sum_{i = 1}^m \alpha_i x_i ) x$, and this means the real number $a = \sum_{i = 1}^m \alpha_i x_i $ for the specific $m$ and $\alpha_i$.
+
+ Under this condition, for any $f(\cdot) = a\cdot = (\sum_{i = 1}^m \alpha_i x_i) \cdot$, $<f(\cdot), K(\cdot, x)>_{\mathscr{F}_K} = <\sum_{i = 1}^m \alpha_i K(\cdot, x_i), K(\cdot, x)>_{\mathscr{F}_K} = \sum_{i = 1}^m \alpha_i K(x, x_i) = \sum_{i = 1}^m \alpha_i x x_i = (\sum_{i = 1}^m \alpha_i x_i) x = ax = f(x)$. So condition 2 is also satisfied.
+
+So $\mathscr{F}$ is the RKHS for  kernel $K(x,y)=xy$. $\square$
 
 \section{Convexity and KKT Conditions}
 
@@ -60,8 +110,8 @@
 		\item Lagrangian stationary:
 		
 		$$\nabla_{\mathbf{w} L} = \mathbf{w} - \sum_{i = 1}^{n} (a_i - b_i) \mathbf{x}_i = 0$$
-		$$\nabla_{\mathbf{\eta} L} = C - \mathbf{a} - \mathbf{c} = 0$$
-		$$\nabla_{\mathbf{\eta^*} L} = C - \mathbf{b} - \mathbf{d} = 0$$
+		$$(\nabla_{\mathbf{\eta} L})_{i} = C - a_i - c_i = 0, i = 1, \dots, n$$
+		$$(\nabla_{\mathbf{\eta^*} L})_{i} = C - b_i - d_i = 0, i = 1, \dots, n$$
 
 	\end{itemize} 
 
@@ -100,10 +150,10 @@
 \section{SVM Implementation}
 \begin{enumerate}[label=(\alph*)]
 	%4a
-	\item See \texttt{smv\_classifier.py}.
+	\item See \texttt{svm\_classifier.py}.
 	
 	%4b
-	\item \textbf{Note: for questions (b) and (c), I use \texttt{sklearn.mode\_selection.train\_test\_split} to split the training and testing set with 2018 as the random seed. And I've noticed if I use \texttt{numpy} to generate indices with 2018 as the random seed and then split, the split is different.} Code for these 2 questions are in \texttt{q4.ipynb}.
+	\item \textbf{Note: for questions (b) and (c), I use \texttt{sklearn.mode\_selection.train\_test\_split} to split the training and testing set with 2018 as the random seed. And if I use \texttt{numpy} with 2018 as the random seed to generate indices for training and testing data and then split, the split is different.} Code for these 2 questions are in \texttt{q4.ipynb}.
 	
 	The accuracy of the classifier on testing data is 0.8636363636363636. The ROC curve is like following:
 	
