@@ -93,6 +93,7 @@ class SVMClassifier:
             self.lambdas += multiplier * yi * Xi
         # compute primal variable lambda_zero
         self.lambda_zero = 1 - np.dot(self.lambdas, X_sv[0])
+        return self.lambdas, self.lambda_zero
 
     def predict(self, X):
         """Method to predict labels based on classifier parameters
@@ -116,6 +117,21 @@ class SVMClassifier:
         n, p = X.shape
         y_hat = np.zeros(n)
         y_hat = self.lambda_zero + np.dot(X, self.lambdas.T)
-        y_hat[y_hat <= 0] = 0
+        y_hat[y_hat <= 0] = -1
         y_hat[y_hat > 0] = 1
         return y_hat.flatten()
+
+if __name__ == '__main__':
+    # demo using linear kernel and a separable training set
+    def linear_kernel(x1, x2):
+        return np.dot(x1, x2)
+
+    linear_smv = SVMClassifier(linear_kernel)
+    X = np.array([[-4, 4], [-3, 1], [-1, 2], [1, 4], [0, -3], [1, 0], [3, 0]])
+    y = np.array([1.0, 1, 1, 1, -1, -1, -1])
+    lambdas, lambda_zero = linear_smv.train(X, y)
+    print('lambdas for linear SVM is:', lambdas)
+    print('lambda_zero for linear SVM is:', lambda_zero)
+    yhat_train = linear_smv.predict(X)
+    accu_train = np.sum(yhat_train == y) / y.shape[0]
+    print('accuracy on training data is', accu_train)
