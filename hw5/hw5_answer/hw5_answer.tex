@@ -36,7 +36,7 @@
 	
 	$$= \min_{\lambda \geq 0} E[\prod_{i = 1}^{n} e^{\lambda (X_i - \mu_{X_i})}] e^{-\lambda nt} = \min_{\lambda \geq 0} (\prod_{i = 1}^{n} E[e^{\lambda (X_i - \mu_{X_i})}]) e^{-\lambda nt}$$
 	
-	Apply Hoeffding's Lemma to each $X_i$:
+	Apply Hoeffding's Lemma to each $X_i, i = 1, \dots, n$:
 	
 	$$\leq \min_{\lambda \geq 0} ( \prod_{i = 1}^{n} \exp(\frac{\lambda^2 (b-a)^2}{8})) \exp(-\lambda nt) = \min_{\lambda \geq 0} \exp(\sum_{i = 1}^{n} \frac{\lambda^2(b-a)^2}{8}) \exp(-\lambda nt)$$
 	
@@ -44,9 +44,10 @@
 	
 	Because the exponential function is increasing on its argument, so its minimal value occurs at its minimal argument value.
 	
-	For $\frac{n \lambda^2 (b-a)^2}{8} - \lambda nt$, when $\lambda^* = \frac{4t}{(b-a)^2}$, its minimal value is $- \frac{2nt^2}{(b-a)^2}$.
+	For $\frac{n \lambda^2 (b-a)^2}{8} - \lambda nt$, when $\lambda^* = \frac{4t}{(b-a)^2} (\geq 0)$, its minimal value is $- \frac{2nt^2}{(b-a)^2}$.
 	
 	So we got $\min_{\lambda \geq 0} \exp(\frac{n \lambda^2 (b-a)^2}{8} - \lambda nt) = \exp(- \frac{2nt^2}{(b-a)^2})$. $\ \ \square$
+	
 	%1b
 	\item
 \end{enumerate}
@@ -88,7 +89,17 @@
 	$$\hat{\beta}^{ridge} = (\boldsymbol{X}^T \boldsymbol{X} + \lambda \boldsymbol{I})^{-1} \boldsymbol{X}^T \boldsymbol{y}$$ in which $\boldsymbol{I}$ is a $p \times p$ diagonal matrix with 1's as its diagonal values.
 	
 	%3b
-	\item
+	\item The plot of average ridge MSE with respect to $\lambda \in [0, 10]$ for both $\beta_1$ and $\beta_2$ is:
+	
+	\includegraphics[scale=0.6]{q3b.png}
+	
+	From the plot we can see:
+	
+	\begin{enumerate}[label=(\arabic*)]
+		\item As $\lambda$ increases, the MSE of both $\beta_1$ and $\beta_2$ increase. This is because $\lambda$ will force regression estimated coefficients $\hat{\beta}$ to be not too large to avoid overfitting, thus leading to imprecise prediction. 
+		
+		\item As $\lambda$ increases, the MSE of $\beta_2$ is larger than that of $\beta_1$. This is because values in $\beta_2^*$ are larger than those in $\beta_1^*$. So their unbiased estimated values will also be larger. With regularization, their estimated values will be shrunk more, so the training MSE will be larger for $\beta_2$.
+	\end{enumerate}
 	
 	%3c
 	\item   
