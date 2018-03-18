@@ -170,6 +170,14 @@
 	
 	So $\hat{\beta}^{ridge} = [\mathbf{X}^{T} \mathbf{X} + \lambda \mathbf{I}_p]^{-1} [\mathbf{X}^{T} \mathbf{Y}] = \mathbf{V} (\mathbf{L}^2 + \lambda \mathbf{I}_{p})^{-1} \mathbf{L} \mathbf{U}^{T}_{p} \mathbf{Y}$. 
 	
-	And $\hat{\gamma}^{ridge} = \mathbf{V}^{T} \hat{\beta}^{ridge} = (\mathbf{L}^2 + \lambda \mathbf{I}_{p})^{-1} \mathbf{L} \mathbf{U}^{T}_{p} \mathbf{Y}$.
+	And $\hat{\gamma}^{ridge} = \mathbf{V}^{T} \hat{\beta}^{ridge} = (\mathbf{L}^2 + \lambda \mathbf{I}_{p})^{-1} \mathbf{L} \mathbf{U}^{T}_{p} \mathbf{Y}. \ \ \ \square$
+	
+	The plot of $\gamma$ and $E[\hat{\gamma}]$ is:
+	
+	\includegraphics[scale=0.6]{q3c1.png}
+	
+	The plot of $\frac{1}{N}\sum_{i=1}^{N}(\hat{\gamma_i}^{(n)} - \gamma_i)^2$ and $\frac{l_i^2 + \gamma_i^2}{(l_i^2 + \lambda)^2}$ is:
+	
+	\includegraphics[scale=0.6]{q3c2.png}
 \end{enumerate}
 \end{document}
