@@ -102,6 +102,74 @@
 	\end{enumerate}
 	
 	%3c
-	\item   
+	\item 
+	From the problem setting, we can know that $\mathbf{U}_{p}^{T} \mathbf{U}_{p} = \mathbf{I}_{p}$, $\mathbf{V}^T \mathbf{V} = \mathbf{I}_{p}$, $\mathbf{L} = \mathbf{L}^{T}$. And because $\mathbf{X}^{T} \mathbf{X} = corr(\mathbf{X})$, $\mathbf{U}^{T}_{p}$ is orthogonal to $\mathbf{1}_{p}$, i.e., $\mathbf{U}^{T}_{p} \mathbf{1}_{p} = \mathbf{1}^{T}_{p} \mathbf{U}_{p} = \mathbf{0}_p$.
+	
+	\begin{eqnarray*}
+	\mathbf{U}^T \mathbf{Y} = 
+		\begin{bmatrix}
+			\mathbf{1}^T_{n} \\
+			\mathbf{U}^T_p \\
+			\mathbf{U}^{T}_{n-p-1}\\
+ 		\end{bmatrix} \mathbf{1}_n \alpha
+ 		+ 
+ 		\begin{bmatrix}
+ 		\mathbf{1}^T_{n} \\
+ 		\mathbf{U}^T_p \\
+ 		\mathbf{U}^{T}_{n-p-1}\\
+ 		\end{bmatrix} \mathbf{U}_{p} \mathbf{L} \mathbf{V}^T \beta
+ 		+ \mathbf{U}^T \epsilon
+	\end{eqnarray*}
+
+	\begin{eqnarray*}
+	=  \begin{bmatrix}
+			n\alpha + \mathbf{1}^T_{n} \mathbf{U}_{p} \mathbf{L} \mathbf{V}^T \beta \\
+			\mathbf{U}^T_p \mathbf{1}_n \alpha + \mathbf{U}^T_p \mathbf{U}_{p} \mathbf{L} \mathbf{V}^T \beta \\
+			\mathbf{U}^{T}_{n-p-1} \mathbf{1}_n \alpha + \mathbf{U}^{T}_{n-p-1} \mathbf{U}_{p} \mathbf{L} \mathbf{V}^T \beta
+		\end{bmatrix} + \mathbf{U}^T \epsilon
+	\end{eqnarray*}
+	
+	\begin{eqnarray*}
+	= \begin{bmatrix}
+			n\alpha \\
+			\mathbf{L} \mathbf{V}^T \beta \\
+			\mathbf{U}^{T}_{n-p-1} \mathbf{1}_n \alpha + \mathbf{U}^{T}_{n-p-1} \mathbf{U}_{p} \mathbf{L} \mathbf{V}^T \beta
+		\end{bmatrix} + \mathbf{U}^T \epsilon
+	\end{eqnarray*}
+
+	At the same time, we have the same equation represented by $\gamma$:
+	
+	\begin{eqnarray*}
+	\mathbf{Y}^* = \mathbf{U}^{T} \mathbf{Y} = 
+		\begin{bmatrix}
+			n\alpha \\
+			\mathbf{L} \gamma \\
+			\mathbf{0}_{n-p-1}
+		\end{bmatrix} + \mathbf{U}^T \epsilon
+	\end{eqnarray*}
+
+	So we have $\mathbf{L} \mathbf{V}^T \beta = \mathbf{L} \gamma$, or $\gamma = \mathbf{V}^{T} \beta$.
+	
+	From the original function $\mathbf{Y} = \mathbf{1} \alpha + \mathbf{U}_{p} \mathbf{L} \mathbf{V}^{T} \beta + \epsilon$, we get the objective function of ridge regression:
+	
+	\begin{equation*}
+	f(\alpha, \beta) = \Vert \mathbf{Y} - \mathbf{1} \alpha - \mathbf{X} \beta \Vert_2^2 + \lambda [\alpha^2 + \Vert \beta \Vert_2^2]
+	\end{equation*}
+	
+	\begin{equation*}
+	\frac{\partial f}{\partial \alpha} = -2 \sum_{i = 1}^{n} (y_i - \alpha - \mathbf{x}_i \beta) + 2 \lambda \alpha = 2(n + \lambda) \alpha -2 \mathbf{1}^{T}_{n} (\mathbf{Y} - \mathbf{X} \beta)  = 0
+	\end{equation*}
+	
+	\begin{equation*}
+	\frac{\nabla f}{\nabla \beta} = -2 \mathbf{X}^{T} (\mathbf{Y} - \mathbf{1} \alpha - \mathbf{X} \beta) + 2 \lambda \beta = 0
+	\end{equation*}
+	
+	From the 2 equations, we get $\hat{\beta}^{ridge} = [\mathbf{X}^{T} (\mathbf{I}_n - \frac{1}{n + \lambda} \mathbf{1}_n \mathbf{1}_n^{T}) \mathbf{X} + \lambda \mathbf{I}_p]^{-1} [\mathbf{X}^{T} (\mathbf{I}_{n} - \frac{1}{n + \lambda} \mathbf{1}_n \mathbf{1}_n^{T}) \mathbf{Y}]$.
+	
+	Since we have $\mathbf{X} = \mathbf{U}_p \mathbf{L} \mathbf{V}^{T}$, $\mathbf{X}^{T} \mathbf{X} = \mathbf{V} \mathbf{L}^2 \mathbf{V}^{T}$, and $\mathbf{X}^{T} \mathbf{1}_{n} = \mathbf{V} \mathbf{L} \mathbf{U}^{T}_{p} \mathbf{1}_n = \mathbf{0}_{p}$.
+	
+	So $\hat{\beta}^{ridge} = [\mathbf{X}^{T} \mathbf{X} + \lambda \mathbf{I}_p]^{-1} [\mathbf{X}^{T} \mathbf{Y}] = \mathbf{V} (\mathbf{L}^2 + \lambda \mathbf{I}_{p})^{-1} \mathbf{L} \mathbf{U}^{T}_{p} \mathbf{Y}$. 
+	
+	And $\hat{\gamma}^{ridge} = \mathbf{V}^{T} \hat{\beta}^{ridge} = (\mathbf{L}^2 + \lambda \mathbf{I}_{p})^{-1} \mathbf{L} \mathbf{U}^{T}_{p} \mathbf{Y}$.
 \end{enumerate}
 \end{document}
