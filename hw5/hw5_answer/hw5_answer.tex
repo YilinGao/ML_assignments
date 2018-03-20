@@ -49,7 +49,22 @@
 	So we got $\min_{\lambda \geq 0} \exp(\frac{n \lambda^2 (b-a)^2}{8} - \lambda nt) = \exp(- \frac{2nt^2}{(b-a)^2})$. $\ \ \square$
 	
 	%1b
-	\item
+	\item Let $X_1, \dots, X_n$ be independent Bernoulli random variables taking values 1 and -1 each with probability 0.5. For each variable $X_i$, its mean is $\mu_{X_i} = E[X_i] = 0$.
+	
+	Its Hoeffding's bound is:
+	
+	\begin{align*}
+	Pr(\frac{1}{n} \sum_{i = 1}^{n} X_i \geq t) \leq \exp (- \frac{2nt^2}{(1 - (-1))^2}) = \exp (- \frac{nt^2}{2}) \text{, for all } t \geq 0
+	\end{align*}
+	
+	And its Bernstein bound is:
+	
+	\begin{align*}
+	Pr(\frac{1}{n} \sum_{i = 1}^{n} X_i \geq t) \leq \exp (- \frac{nt^2}{2(1 + \frac{t}{3})}) \text{, for all } t \geq 0
+	\end{align*}
+	
+	In the two cases, $\exp (- \frac{nt^2}{2(1 + \frac{t}{3})}) \geq  \exp (- \frac{nt^2}{2})$ for all $t \geq 0$. So the probability of $\frac{1}{n} \sum_{i = 1}^{n} X_i \geq t$ is always smaller for Hoeffding's bound, which means the Hoeffding's bound is looser than the Bernstein bound. 
+
 \end{enumerate}
 
 \section{VC Dimension}
