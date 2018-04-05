@@ -51,8 +51,20 @@
 	
 	\item See the implementation in \verb|q3.ipynb|.
 	
-	\item 
+	\item The empirical clustering results on the dataset with both algorithms are as following:
 	
-	\item
+	K-Means:
+	
+	\includegraphics[scale=0.6]{q3c1.png}
+	
+	Hierarchical Agglomerative Clustering:
+	
+	\includegraphics[scale=0.6]{q3c2.png}
+	
+	From the visualization, we can tell the hierarchical agglomerative clustering algorithm performs better. 
+	
+	On this specific dataset, the possible reason for the discrepancy is that K-Means assumes the variance of each X variable is spherical. However, the given data doesn't satisfy this assumption. 
+	
+	\item Possible preprocessing on data to make K-Means perform better: normalize each X variable to mean = 0 and variance = 1.
 \end{enumerate}
 \end{document}
