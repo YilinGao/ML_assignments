@@ -47,9 +47,29 @@
 	\includegraphics[scale=0.6]{q12a2.png}
 	
 	The minimal number of hidden neurons is 2.  Because the 2D bump is only in the direction of $x_1$, so we can regard it same as the one in part 1, and ignore the input $x_2$.
-	\item 
 	
-	\item 
+	\item The NN architecture is like following:
+	
+	\includegraphics[scale=0.4]{q12b1.png}
+	
+	The implementation is in \verb|q1.ipynb|. The approximated function is as following:
+	
+	\includegraphics[scale=0.6]{q12b2.png}
+	
+	The minimal number of hidden neuron in the first layer is 4. Because the 2D bump is a combination of a bump in $x_1$ direction and another bump in $x_2$ direction, and each bump needs 2 hidden neurons according to previous question.
+	
+	\item For a grid $(x_1, x_2)$ such that $x_1 \in [x_1^*, x_1^* + \frac{1}{n}]$ and $x_2 \in [x_2^*, x_2^* + \frac{1}{n}]$, assume the tower function we use to approximate has height $h^* = f(x_1^*, x_2^*)$.
+	
+	Because the grid is small enough, we can assume for any fixed $x_2^0$, $f(x_1, x_2^0)$ is linear with $x_1 \in [x_1^*, x_1^* + \frac{1}{n}]$, and for any fixed $x_1^0$, $f(x_1^0, x_2)$ is linear with $x_2 \in [x_2^*, x_2^* + \frac{1}{n}]$. So we have: $f(x_1, x_2^0) = \frac{\partial f(x_1, x_2^0)}{\partial x_1} (x_1 - x_1^*)$ for $x_1 \in [x_1^*, x_1^* + \frac{1}{n}]$, and $f(x_1^0, x_2) = \frac{\partial f(x_1^0, x_2)}{\partial x_2} (x_2 - x_2^*)$ for $x_2 \in [x_2^*, x_2^* + \frac{1}{n}]$. 
+	
+	Because the maximum absolute value of the gradient for both directions is $t$, $|\frac{\partial f(x_1, x_2^0)}{\partial x_1}| \leq t$, and $|\frac{\partial f(x_1^0, x_2)}{\partial x_2}| \leq t$.
+	
+	The approximation error on the grid = $\int_{x_1^*}^{x_1^*+\frac{1}{n}} \int_{x_2^*}^{x_2^*+\frac{1}{n}} [f(x_1, x_2) - h^*] dx_1 dx_2$. If we view it geometrically, we can easily find under this setting, it is a regular 3D object that we can calculate its volume with know data. When $|\frac{\partial f(x_1, x_2^0)}{\partial x_1}| = t$, and $|\frac{\partial f(x_1^0, x_2)}{\partial x_2}| = t$, its maximal volume is $\frac{t}{n^3}$.
+	
+	So we have $\frac{t}{n^3} \leq \epsilon$, $n \geq \sqrt[3]{\frac{t}{\epsilon}}$. So the minimum number of tower functions to make such approximation is $n^2 = \sqrt[3]{\frac{t^2}{\epsilon^2}}$.
+	
+	One tower function has 5 hidden neurons in total. So the total number of required hidden neurons = $5 \sqrt[3]{\frac{t^2}{\epsilon^2}}$. When the gradient limit is larger, the total required number of hidden neurons is also larger. When the error bound is smaller, the total required number of hidden neurons is smaller.
+	
 \end{enumerate}
 
 \section{EM}
@@ -79,6 +99,7 @@
 	
 	On this specific dataset, the possible reason for the discrepancy is that K-Means assumes the variance of each X variable is spherical. However, the given data doesn't satisfy this assumption. 
 	
-	\item Possible preprocessing on data to make K-Means perform better: normalize each X variable to mean = 0 and variance = 1.
+	\item Possible preprocessing on data to make K-Means perform better: move the data to center at $[0, 0]$, and turn the data represented by cartesian coordinates into polar coordinates ($[\rho, \theta]$). Then run K-Means on the $\rho$ values of all data. Because points in the same cluster all have similar $\rho$ values. 
+	
 \end{enumerate}
 \end{document}
