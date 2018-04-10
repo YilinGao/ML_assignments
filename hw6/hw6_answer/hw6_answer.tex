@@ -7,6 +7,7 @@
 \usepackage{enumitem}
 \usepackage{amsmath}
 \usepackage{mathrsfs}
+\usepackage{algorithm2e}
 
 %opening
 \title{Compsci 571 HW6}
@@ -74,9 +75,49 @@
 
 \section{EM}
 \begin{enumerate}[label=(\alph*)]
-	\item 
+	\item Notations used:
 	
-	\item 
+	$i$: index for laundry visit, $i \in \{1, \dots, m\}$,
+	
+	$z_i$: the machine used in visit $i$, $z_i \in \{1, 2\}$,
+	
+	$\vec{X}_i$: random variable to represent possible working conditions of the chosen machine in visit $i$, $\vec{X}_i \in R^n$, and its each value equals to 0 (not broken) or 1 (broken),
+	
+	$\vec{x}_i$: the observed working conditions of the chosen machine in visit $i$, $\vec{x}_i \in R^n$, and its each value equals to 0 (not broken) or 1 (broken),
+	
+	$w_k$: the probability to use machine $k$ in one laundry visit, $k \in \{1, 2\}$, and $\sum_{k = 1}^{2} w_k = 1$,
+	
+	$\theta_k$: the probability that machine $k$ breaks down, $k \in \{1, 2\}$.
+	
+	So we could have: $P(z_i = k | w) = w_k$.
+	
+	And we could see that given $z_i = k$ and $\theta_{k}$, $\vec{X}_i$ follows multivariate Bernoulli distribution, $P(\vec{X}_i = \vec{x}_i | z_i = k, \theta_k) = \prod_{j = 1}^{n} \theta_k^{x_{ij}} (1-\theta_k)^{(1-x_{ij})}$.
+	
+	The EM algorithm works as following:
+	
+	\begin{algorithm}[H]
+		Initialize $\vec{w}$ and $\vec{\theta}$ as $\vec{w}_0$ and $\vec{\theta}_0$\;
+		\For{$t = 0, 1, \dots $ }{
+			E step: Compute $P(z_i = k | \vec{x}_i, \vec{w}_t, \vec{\theta}_t) =: \gamma_{ik}^{t+1}$ \;
+			M step: Maximize the auxilary function $A(\vec{w}, \vec{\theta}, \vec{w}_t, \vec{\theta}_t)$ by choosing $\vec{w}_{t+1}$ and $\vec{\theta}_{t+1}$.
+			
+			\If{$\vec{w}$ and $\vec{\theta}$ have converged}{Break the for loop\;}
+		}
+	\end{algorithm}
+	
+	So in $t$'th E step:
+	
+	$\gamma_{ik}^{t+1} =: P(z_i = k | \vec{x}_i, \vec{w}_t, \vec{\theta}_t) = \frac{P(z_i = k, \vec{X}_i = \vec{x}_i | \vec{w}_t, \vec{\theta}_t)}{P(\vec{X}_i = \vec{x}_i | \vec{w}_t, \vec{x}_t)} = \frac{P(\vec{X}_i = \vec{x}_i | z_i, \vec{w}_i, \vec{\theta}_i) P(z_i = k | \vec{w}_t, \vec{\theta}_t)}{P(\vec{X}_i = \vec{x}_i | \vec{w}_t, \vec{\theta}_t)} = \frac{[\prod_{j=1}^{n} \theta_{kt}^{x_{ij}} (1- \theta_{kt})^{(1-x_{ij})}] w_{kt}}{\sum_{k = 1}^{2}([\prod_{j=1}^{n} \theta_{kt}^{x_{ij}} (1- \theta_{kt})^{(1-x_{ij})}] w_{kt}) }$.
+	
+	In $t$'th M step:
+	
+	$A(\vec{w}, \vec{\theta}, \vec{w}_t, \vec{\theta}_t) = \sum_{i = 1}^{m} \sum_{k = 1}^{2} \gamma_{ik}^{t+1} \log P(\vec{X}_i = \vec{x}_i, z_i = k | \vec{w}, \vec{\theta}) = \sum_{i = 1}^{m} \sum_{k = 1}^{2} \gamma_{ik}^{t+1} \log P(z_i = k | \vec{w}, \vec{\theta}) P(\vec{X}_i = \vec{x}_i | z_i = k, \vec{w}, \vec{\theta}) = \sum_{i = 1}^{m} \sum_{k = 1}^{2} \gamma_{ik}^{t+1} \log [w_{kt} \prod_{j = 1}^{n} \theta_k^{x_{ij}} (1-\theta_k)^{(1-x_{ij})}] = \sum_{i = 1}^{m} \sum_{k = 1}^{2} \gamma_{ik}^{t+1} [\log w_{kt} + \sum_{j = 1}^{n} (x_{ij} \log \theta_k + (1 - x_{ij}) \log (1 - \theta_k))]$
+	
+	We need to maximize $A(\vec{w}, \vec{\theta}, \vec{w}_t, \vec{\theta}_t)$ subject to the constraint that $w_{1(t+1)} + w_{2(t+1)} = 1$.
+	
+	With the Lagrangian method, set the partial derivatives of $A(.)$ w.r.t. $\theta_{k}$ and $w_{k}$ equal to 0, we could get $\theta_{k(t+1)} = \frac{\sum_{i = 1}^{m} \gamma_{ik}^{t+1} \sum_{j = 1}^{n} x_{ij} / n}{\sum_{i = 1}^{m} \gamma_{ik}^{t+1}}$, and $w_{k(t+1)} = \frac{\sum_{i = 1}^{m} \gamma_{ik}^{t+1}}{m}$.
+	
+	\item See the implementation in \verb|q2.ipynb|. For the specific simulated data left in the notebook, the estimated $\hat{\theta}_1 = 0.77$ and estimated $\hat{\theta}_2 = 0.34$. The estimation changes as the simulated data change.
 \end{enumerate}
 
 \section{Clustering}
