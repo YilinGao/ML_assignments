@@ -59,19 +59,21 @@
 	
 	The minimal number of hidden neuron in the first layer is 4. Because the 2D bump is a combination of a bump in $x_1$ direction and another bump in $x_2$ direction, and each bump needs 2 hidden neurons according to previous question.
 	
-	\item For a grid $(x_1, x_2)$ such that $x_1 \in [x_1^*, x_1^* + \frac{1}{n}]$ and $x_2 \in [x_2^*, x_2^* + \frac{1}{n}]$, assume the tower function we use to approximate has height $h^* = f(x_1^*, x_2^*)$.
+	\item For a grid $(x_1, x_2)$ such that $x_1 \in [x_1^*, x_1^* + \frac{1}{n}]$ and $x_2 \in [x_2^*, x_2^* + \frac{1}{n}]$, assume the tower function we use to approximate has height $h^*$.
 	
 	Because the grid is small enough, we can assume for any fixed $x_2^0$, $f(x_1, x_2^0)$ is linear with $x_1 \in [x_1^*, x_1^* + \frac{1}{n}]$, and for any fixed $x_1^0$, $f(x_1^0, x_2)$ is linear with $x_2 \in [x_2^*, x_2^* + \frac{1}{n}]$. So we have: $f(x_1, x_2^0) = \frac{\partial f(x_1, x_2^0)}{\partial x_1} (x_1 - x_1^*)$ for $x_1 \in [x_1^*, x_1^* + \frac{1}{n}]$, and $f(x_1^0, x_2) = \frac{\partial f(x_1^0, x_2)}{\partial x_2} (x_2 - x_2^*)$ for $x_2 \in [x_2^*, x_2^* + \frac{1}{n}]$. 
 	
 	Because the maximum absolute value of the gradient for both directions is $t$, $|\frac{\partial f(x_1, x_2^0)}{\partial x_1}| \leq t$, and $|\frac{\partial f(x_1^0, x_2)}{\partial x_2}| \leq t$.
 	
-	The approximation error on the grid = $\int_{x_1^*}^{x_1^*+\frac{1}{n}} \int_{x_2^*}^{x_2^*+\frac{1}{n}} [f(x_1, x_2) - h^*] dx_1 dx_2$. If we view it geometrically, we can easily find under this setting, it is a regular 3D object that we can calculate its volume with know data (like following). When $|\frac{\partial f(x_1, x_2^0)}{\partial x_1}| = t$, and $|\frac{\partial f(x_1^0, x_2)}{\partial x_2}| = t$, its maximal volume is $\frac{t}{n^3}$.
+	The approximation error on the grid = $\int_{x_1^*}^{x_1^*+\frac{1}{n}} \int_{x_2^*}^{x_2^*+\frac{1}{n}} [f(x_1, x_2) - h^*] dx_1 dx_2$. Fixing the gradients of $f(x_1, x_2)$, changing the value of $h^*$, to make the error smallest, we would choose $h^* = f(x_1^*, x_2^* + \frac{1}{n}) = f(x_1^* + \frac{1}{n}, x_2^*)$. Under this circumstance, the largest error occurs when $|\frac{\partial f(x_1, x_2^0)}{\partial x_1}| = t$, and $|\frac{\partial f(x_1^0, x_2)}{\partial x_2}| = t$. 
 	
-	\includegraphics[scale=0.3]{q12c.png}
+	If we view it geometrically, we can easily find it is a regular 3D object that we can calculate its volume with know data (like following). Its volume is $V_{ABCD} + V_{EFBC} = 2V_{ABCD} = \frac{t}{3n^3}$.
 	
-	So we have $\frac{t}{n^3} \leq \epsilon$, $n \geq \sqrt[3]{\frac{t}{\epsilon}}$. So the minimum number of tower functions to make such approximation is $n^2 = \sqrt[3]{\frac{t^2}{\epsilon^2}}$.
+	\includegraphics[scale=0.1]{q12c.png}
 	
-	One tower function has 5 hidden neurons in total. So the total number of required hidden neurons = $5 \sqrt[3]{\frac{t^2}{\epsilon^2}}$. When the gradient limit is larger, the total required number of hidden neurons is also larger. When the error bound is larger, the total required number of hidden neurons is smaller.
+	So we have $\frac{t}{3n^3} \leq \epsilon$, $n \geq \sqrt[3]{\frac{t}{3\epsilon}}$. So the minimum number of tower functions to make such approximation is $n^2 = \sqrt[3]{\frac{t^2}{9\epsilon^2}}$.
+	
+	One tower function has 5 hidden neurons in total. So the total number of required hidden neurons = $5 \sqrt[3]{\frac{t^2}{9\epsilon^2}}$. When the gradient limit is larger, the total required number of hidden neurons is also larger. When the error bound is larger, the total required number of hidden neurons is smaller.
 	
 \end{enumerate}
 
@@ -83,9 +85,9 @@
 	
 	$z_i$: the machine used in visit $i$, $z_i \in \{1, 2\}$,
 	
-	$X_i$: random variable to represent possible number of failed cycles of the chosen machine in visit $i$, $X_i \in [0, n]$,
+	$X_i$: random variable to represent possible number of failed cycles of the chosen machine in visit $i$, $X_i \in \{0, \dots, n\}$,
 	
-	$x_i$: the observed number of failed cycles of the chosen machine in visit $i$, $x_i \in [0, n]$,
+	$x_i$: the observed number of failed cycles of the chosen machine in visit $i$, $x_i \in \{0, \dots, n\}$,
 	
 	$w_{ik}$: the probability to use machine $k$ in the laundry visit $i$, $k \in \{1, 2\}$, and $\sum_{k = 1}^{2} w_{ik} = 1$ for $\forall i$,
 	
@@ -119,7 +121,7 @@
 	
 	With the Lagrangian method, set the partial derivatives of $A(.)$ w.r.t. $\theta_{k}$ and $w_{ik}$ equal to 0, we could get $\theta_{k}^{t+1} = \frac{\sum_{i = 1}^{m} \gamma_{ik}^{t+1} x_i}{n \sum_{i = 1}^{m} \gamma_{ik}^{t+1}}$, and $w_{ik}^{t+1} = \frac{\gamma_{ik}^{t+1}}{\sum_{k = 1}^{2} \gamma_{ik}^{t+1}}$, for $k = \{1, 2\}$ and $i \in [1, m]$.
 	
-	\item See the implementation in \verb|q2.ipynb|. For the specific simulated data left in the notebook, and the initial parameter $w_{ik}^0 =  0.5$ $\forall i \forall k$ and $\vec{\theta}^0 = [0.9, 0.1]$, the estimated $\hat{\theta}_1 = 0.7725$ and estimated $\hat{\theta}_2 = 0.305$. The estimation changes as the simulated data and initialization change.
+	\item See the implementation in \verb|q2.ipynb|. For the specific simulated data left in the notebook, and the initial parameter $w_{ik}^0 =  0.5$ $\forall i \forall k$ and $\vec{\theta}^0 = [0.9, 0.1]$, the estimated $\hat{\theta}_1 = 0.82$ and estimated $\hat{\theta}_2 = 0.325$. The estimation changes as the simulated data and initialization change.
 \end{enumerate}
 
 \section{Clustering}
