@@ -65,11 +65,13 @@
 	
 	Because the maximum absolute value of the gradient for both directions is $t$, $|\frac{\partial f(x_1, x_2^0)}{\partial x_1}| \leq t$, and $|\frac{\partial f(x_1^0, x_2)}{\partial x_2}| \leq t$.
 	
-	The approximation error on the grid = $\int_{x_1^*}^{x_1^*+\frac{1}{n}} \int_{x_2^*}^{x_2^*+\frac{1}{n}} [f(x_1, x_2) - h^*] dx_1 dx_2$. If we view it geometrically, we can easily find under this setting, it is a regular 3D object that we can calculate its volume with know data. When $|\frac{\partial f(x_1, x_2^0)}{\partial x_1}| = t$, and $|\frac{\partial f(x_1^0, x_2)}{\partial x_2}| = t$, its maximal volume is $\frac{t}{n^3}$.
+	The approximation error on the grid = $\int_{x_1^*}^{x_1^*+\frac{1}{n}} \int_{x_2^*}^{x_2^*+\frac{1}{n}} [f(x_1, x_2) - h^*] dx_1 dx_2$. If we view it geometrically, we can easily find under this setting, it is a regular 3D object that we can calculate its volume with know data (like following). When $|\frac{\partial f(x_1, x_2^0)}{\partial x_1}| = t$, and $|\frac{\partial f(x_1^0, x_2)}{\partial x_2}| = t$, its maximal volume is $\frac{t}{n^3}$.
+	
+	\includegraphics[scale=0.3]{q12c.png}
 	
 	So we have $\frac{t}{n^3} \leq \epsilon$, $n \geq \sqrt[3]{\frac{t}{\epsilon}}$. So the minimum number of tower functions to make such approximation is $n^2 = \sqrt[3]{\frac{t^2}{\epsilon^2}}$.
 	
-	One tower function has 5 hidden neurons in total. So the total number of required hidden neurons = $5 \sqrt[3]{\frac{t^2}{\epsilon^2}}$. When the gradient limit is larger, the total required number of hidden neurons is also larger. When the error bound is smaller, the total required number of hidden neurons is smaller.
+	One tower function has 5 hidden neurons in total. So the total number of required hidden neurons = $5 \sqrt[3]{\frac{t^2}{\epsilon^2}}$. When the gradient limit is larger, the total required number of hidden neurons is also larger. When the error bound is larger, the total required number of hidden neurons is smaller.
 	
 \end{enumerate}
 
@@ -81,25 +83,25 @@
 	
 	$z_i$: the machine used in visit $i$, $z_i \in \{1, 2\}$,
 	
-	$\vec{X}_i$: random variable to represent possible working conditions of the chosen machine in visit $i$, $\vec{X}_i \in R^n$, and its each value equals to 0 (not broken) or 1 (broken),
+	$X_i$: random variable to represent possible number of failed cycles of the chosen machine in visit $i$, $X_i \in [0, n]$,
 	
-	$\vec{x}_i$: the observed working conditions of the chosen machine in visit $i$, $\vec{x}_i \in R^n$, and its each value equals to 0 (not broken) or 1 (broken),
+	$x_i$: the observed number of failed cycles of the chosen machine in visit $i$, $x_i \in [0, n]$,
 	
-	$w_k$: the probability to use machine $k$ in one laundry visit, $k \in \{1, 2\}$, and $\sum_{k = 1}^{2} w_k = 1$,
+	$w_{ik}$: the probability to use machine $k$ in the laundry visit $i$, $k \in \{1, 2\}$, and $\sum_{k = 1}^{2} w_{ik} = 1$ for $\forall i$,
 	
 	$\theta_k$: the probability that machine $k$ breaks down, $k \in \{1, 2\}$.
 	
-	So we could have: $P(z_i = k | w) = w_k$.
+	So we could have: $P(z_i = k | \vec{w}) = w_{ik}$.
 	
-	And we could see that given $z_i = k$ and $\theta_{k}$, $\vec{X}_i$ follows multivariate Bernoulli distribution, $P(\vec{X}_i = \vec{x}_i | z_i = k, \theta_k) = \prod_{j = 1}^{n} \theta_k^{x_{ij}} (1-\theta_k)^{(1-x_{ij})}$.
+	And we could see that given $z_i = k$ and $\theta_{k}$, $X_i$ follows Binomial distribution $(n, \theta_{k})$, $P(X_i = x_i | z_i = k, \theta_k) = \binom{n}{x_i} \theta_k^{x_{i}} (1-\theta_k)^{(n-x_{i})}$.
 	
 	The EM algorithm works as following:
 	
 	\begin{algorithm}[H]
-		Initialize $\vec{w}$ and $\vec{\theta}$ as $\vec{w}_0$ and $\vec{\theta}_0$\;
+		Initialize $\vec{w}$ and $\vec{\theta}$ as $\vec{w}^0$ and $\vec{\theta}^0$\;
 		\For{$t = 0, 1, \dots $ }{
-			E step: Compute $P(z_i = k | \vec{x}_i, \vec{w}_t, \vec{\theta}_t) =: \gamma_{ik}^{t+1}$ \;
-			M step: Maximize the auxilary function $A(\vec{w}, \vec{\theta}, \vec{w}_t, \vec{\theta}_t)$ by choosing $\vec{w}_{t+1}$ and $\vec{\theta}_{t+1}$.
+			E step: Compute $P(z_i = k | x_i, \vec{w}_t, \vec{\theta}_t) =: \gamma_{ik}^{t+1}$ \;
+			M step: Maximize the auxilary function $A(\vec{w}, \vec{\theta}, \vec{w}_t, \vec{\theta}_t)$ by choosing $\vec{w}^{t+1}$ and $\vec{\theta}^{t+1}$.
 			
 			\If{$\vec{w}$ and $\vec{\theta}$ have converged}{Break the for loop\;}
 		}
@@ -107,17 +109,17 @@
 	
 	So in $t$'th E step:
 	
-	$\gamma_{ik}^{t+1} =: P(z_i = k | \vec{x}_i, \vec{w}_t, \vec{\theta}_t) = \frac{P(z_i = k, \vec{X}_i = \vec{x}_i | \vec{w}_t, \vec{\theta}_t)}{P(\vec{X}_i = \vec{x}_i | \vec{w}_t, \vec{x}_t)} = \frac{P(\vec{X}_i = \vec{x}_i | z_i, \vec{w}_i, \vec{\theta}_i) P(z_i = k | \vec{w}_t, \vec{\theta}_t)}{P(\vec{X}_i = \vec{x}_i | \vec{w}_t, \vec{\theta}_t)} = \frac{[\prod_{j=1}^{n} \theta_{kt}^{x_{ij}} (1- \theta_{kt})^{(1-x_{ij})}] w_{kt}}{\sum_{k = 1}^{2}([\prod_{j=1}^{n} \theta_{kt}^{x_{ij}} (1- \theta_{kt})^{(1-x_{ij})}] w_{kt}) }$.
+	$\gamma_{ik}^{t+1} =: P(z_i = k | x_i, \vec{w}^t, \vec{\theta}^t) = \frac{P(z_i = k, X_i = x_i | \vec{w}^t, \vec{\theta}^t)}{P(X_i = x_i | \vec{w}^t, \vec{\theta}^t)} = \frac{P(X_i = x_i | z_i = k, \vec{w}^t, \vec{\theta}^t) P(z_i = k | \vec{w}^t, \vec{\theta}^t)}{P(X_i = x_i | \vec{w}^t, \vec{\theta}^t)} = \frac{\binom{n}{x_i} {(\theta_k^t)}^{x_{i}} {(1-\theta_k^t)}^{(n-x_{i})} w_{ik}^t}{\sum_{k = 1}^{2}(\binom{n}{x_i} {(\theta_k^t)}^{x_{i}} {(1-\theta_k^t)}^{(n-x_{i})} w_{ik}^t) } = \frac{ {(\theta_k^t)}^{x_{i}} {(1-\theta_k^t)}^{(n-x_{i})} w_{ik}^t}{\sum_{k = 1}^{2}( {(\theta_k^t)}^{x_{i}} {(1-\theta_k^t)}^{(n-x_{i})} w_{ik}^t) }$.
 	
 	In $t$'th M step:
 	
-	$A(\vec{w}, \vec{\theta}, \vec{w}_t, \vec{\theta}_t) = \sum_{i = 1}^{m} \sum_{k = 1}^{2} \gamma_{ik}^{t+1} \log P(\vec{X}_i = \vec{x}_i, z_i = k | \vec{w}, \vec{\theta}) = \sum_{i = 1}^{m} \sum_{k = 1}^{2} \gamma_{ik}^{t+1} \log P(z_i = k | \vec{w}, \vec{\theta}) P(\vec{X}_i = \vec{x}_i | z_i = k, \vec{w}, \vec{\theta}) = \sum_{i = 1}^{m} \sum_{k = 1}^{2} \gamma_{ik}^{t+1} \log [w_{kt} \prod_{j = 1}^{n} \theta_k^{x_{ij}} (1-\theta_k)^{(1-x_{ij})}] = \sum_{i = 1}^{m} \sum_{k = 1}^{2} \gamma_{ik}^{t+1} [\log w_{kt} + \sum_{j = 1}^{n} (x_{ij} \log \theta_k + (1 - x_{ij}) \log (1 - \theta_k))]$
+	$A(\vec{w}, \vec{\theta}, \vec{w}_t, \vec{\theta}_t) = \sum_{i = 1}^{m} \sum_{k = 1}^{2} \gamma_{ik}^{t+1} \log P(X_i = x_i, z_i = k | \vec{w}, \vec{\theta}) = \sum_{i = 1}^{m} \sum_{k = 1}^{2} \gamma_{ik}^{t+1} \log P(z_i = k | \vec{w}, \vec{\theta}) P(X_i = x_i | z_i = k, \vec{w}, \vec{\theta}) = \sum_{i = 1}^{m} \sum_{k = 1}^{2} \gamma_{ik}^{t+1} \log [w_{ik} \binom{n}{x_i} \theta_k^{x_{i}} (1-\theta_k)^{(n-x_{i})}] = \sum_{i = 1}^{m} \sum_{k = 1}^{2} \gamma_{ik}^{t+1} [\log w_{ik} + \log \binom{n}{x_i} + x_i \log \theta_{k} + (n-x_i) \log (n - \theta_{k})]$
 	
-	We need to maximize $A(\vec{w}, \vec{\theta}, \vec{w}_t, \vec{\theta}_t)$ subject to the constraint that $w_{1(t+1)} + w_{2(t+1)} = 1$.
+	We need to maximize $A(\vec{w}, \vec{\theta}, \vec{w}_t, \vec{\theta}_t)$ subject to the constraint that $\sum_{k = 1}^{2} w_{ik} = 1$ for $\forall i$.
 	
-	With the Lagrangian method, set the partial derivatives of $A(.)$ w.r.t. $\theta_{k}$ and $w_{k}$ equal to 0, we could get $\theta_{k(t+1)} = \frac{\sum_{i = 1}^{m} \gamma_{ik}^{t+1} \sum_{j = 1}^{n} x_{ij} / n}{\sum_{i = 1}^{m} \gamma_{ik}^{t+1}}$, and $w_{k(t+1)} = \frac{\sum_{i = 1}^{m} \gamma_{ik}^{t+1}}{m}$.
+	With the Lagrangian method, set the partial derivatives of $A(.)$ w.r.t. $\theta_{k}$ and $w_{ik}$ equal to 0, we could get $\theta_{k}^{t+1} = \frac{\sum_{i = 1}^{m} \gamma_{ik}^{t+1} x_i}{n \sum_{i = 1}^{m} \gamma_{ik}^{t+1}}$, and $w_{ik}^{t+1} = \frac{\gamma_{ik}^{t+1}}{\sum_{k = 1}^{2} \gamma_{ik}^{t+1}}$, for $k = \{1, 2\}$ and $i \in [1, m]$.
 	
-	\item See the implementation in \verb|q2.ipynb|. For the specific simulated data left in the notebook, the estimated $\hat{\theta}_1 = 0.77$ and estimated $\hat{\theta}_2 = 0.34$. The estimation changes as the simulated data change.
+	\item See the implementation in \verb|q2.ipynb|. For the specific simulated data left in the notebook, and the initial parameter $w_{ik}^0 =  0.5$ $\forall i \forall k$ and $\vec{\theta}^0 = [0.9, 0.1]$, the estimated $\hat{\theta}_1 = 0.7725$ and estimated $\hat{\theta}_2 = 0.305$. The estimation changes as the simulated data and initialization change.
 \end{enumerate}
 
 \section{Clustering}
@@ -138,9 +140,15 @@
 	
 	From the visualization, we can tell the hierarchical agglomerative clustering algorithm performs better. 
 	
-	On this specific dataset, the possible reason for the discrepancy is that K-Means assumes the variance of each X variable is spherical. However, the given data doesn't satisfy this assumption. 
+	On this specific dataset, possible reasons for the discrepancy are:
 	
-	\item Possible preprocessing on data to make K-Means perform better: move the data to center at $[0, 0]$, and turn the data represented by cartesian coordinates into polar coordinates ($[\rho, \theta]$). Then run K-Means on the $\rho$ values of all data. Because points in the same cluster all have similar $\rho$ values. 
+	\begin{itemize}
+		\item K-Means assumes the variance of each X variable is spherical. However, the given data don't satisfy this assumption.
+		
+		\item The data already form some evident clusters (separated), and the hierarchical agglomerative clustering usually works better in this case.
+	\end{itemize}
+	
+	\item Possible preprocessing on data to make K-Means perform better: move the data to center at $[0, 0]$ (subtract $\bar{x_1}$ from $x_1$, and subtract $\bar{x_2}$ from $x_2$), and turn the data represented by cartesian coordinates into polar coordinates ($[\rho, \theta]$). Then run K-Means on the $\rho$ values of all data. Because points in the same cluster all have similar $\rho$ values. 
 	
 \end{enumerate}
 \end{document}
